@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 using std::cout;
 using std::cin;
@@ -56,3 +57,4 @@ Studentas ivesk(){
     Laik.rez=Laik.egzas*0.6 + double(sum)/double(Laik.paz.size())*0.4;
     return Laik;
 }
+
