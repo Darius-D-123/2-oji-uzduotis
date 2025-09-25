@@ -40,6 +40,7 @@ void issaugokIFaila(const vector<Studentas> &Grupe, const string &failoVardas);
 void parodykFailuSarasa();
 void rusiokStudentus(vector<Studentas> &Grupe);
 bool arSkaicius(const string &str);
+int gautiSkaiciu(const string &pranesimas);
 
 int main() {
     srand(time(nullptr));
@@ -52,14 +53,13 @@ int main() {
     cout << "  n - ivesti ranka\n";
     cout << "  f - nuskaityti is failo\n";
     cin >> pasirinkimas;
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
        } while (pasirinkimas != 't' && pasirinkimas != 'T' &&
              pasirinkimas != 'n' && pasirinkimas != 'N' &&
              pasirinkimas != 'f' && pasirinkimas != 'F');
     if (pasirinkimas == 'f' || pasirinkimas == 'F') {
         parodykFailuSarasa();
-        int failoPasirinkimas;
-        cout << "Pasirinkite faila (iveskite skaiciu): ";
-        cin >> failoPasirinkimas;
+        int failoPasirinkimas = gautiSkaiciu("Pasirinkite faila (iveskite skaiciu 1-3): ");
         string failoVardas;
         switch (failoPasirinkimas) {
             case 1: failoVardas = "studentai10000.txt"; break;
@@ -72,10 +72,12 @@ int main() {
         }
         cout << "Skaitomas failas: " << failoVardas << endl;
         Grupe = nuskaitykIsFailo(failoVardas);
+        if (Grupe.empty()) {
+            cout << "Nepavyko nuskaityti studentu duomenu. Programa baigia darba.\n";
+            return 1;
+        }
     } else {
-        int kiek;
-        cout << "Kiek studentu norite ivesti? ";
-        cin >> kiek;
+        int kiek = gautiSkaiciu("Kiek studentu norite ivesti? ");
         bool randomMode = (pasirinkimas == 't' || pasirinkimas == 'T');
         for (int j = 0; j < kiek; j++) {
             cout << "\n--- Studentas " << j + 1 << " ---\n";
@@ -91,8 +93,8 @@ int main() {
 
 Studentas ivesk(bool randomMode) {
     Studentas Laik;
-    cout << "Iveskite varda: "; cin >> Laik.vard;
-    cout << "Iveskite pavarde: "; cin >> Laik.pav;
+    cout << "Iveskite varda: "; getline(cin, Laik.vard);
+    cout << "Iveskite pavarde: "; getline(cin, Laik.pav);
     if (randomMode) {
         int n = rand() % 8 + 3;
         for (int i = 0; i < n; i++) {
@@ -102,17 +104,54 @@ Studentas ivesk(bool randomMode) {
         cout << "Sugeneruoti " << n << " pazymiai ir egzaminas.\n";
     } else {
         int m;
-        cout << "Iveskite pazymius (baigti su ne skaiciumi, pvz. ENTER):\n";
+        cout << "Iveskite pazymius (baigti su 'q' arba ne skaiciumi):\n";
+        string input;
+        int pazymiuKiekis = 0;
         while (true) {
-            if (!(cin >> m)) {
-                cin.clear();
-                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cout << "Pazymys " << (pazymiuKiekis + 1) << ": ";
+            getline(cin, input);
+            if (input == "q" || input == "Q") {
+                if (pazymiuKiekis == 0) {
+                    cout << "Privalote ivesti bent viena pazymi! Bandykite dar karta.\n";
+                    continue;
+                }
                 break;
             }
-            Laik.paz.push_back(m);
+            if (arSkaicius(input)) {
+                try {
+                    int pazymys = std::stoi(input);
+                    if (pazymys >= 1 && pazymys <= 10) {
+                        Laik.paz.push_back(pazymys);
+                        pazymiuKiekis++;
+                    } else {
+                        cout << "Klaida: pazymys turi buti nuo 1 iki 10!\n";
+                    }
+                } catch (const std::exception& e) {
+                    cout << "Klaida: netinkamas pazymys! Bandykite dar karta.\n";
+                }
+            } else {
+                cout << "Klaida: iveskite skaiciu nuo 1 iki 10 arba 'q' baigti! Bandykite dar karta.\n";
+            }
         }
-        cout << "Iveskite egzamino rezultata: ";
-        cin >> Laik.egzas;
+        while (true) {
+            string egzInput;
+            cout << "Iveskite egzamino rezultata (1-10): ";
+            getline(cin, egzInput);
+            if (arSkaicius(egzInput)) {
+                try {
+                    Laik.egzas = std::stoi(egzInput);
+                    if (Laik.egzas >= 1 && Laik.egzas <= 10) {
+                        break;
+                    } else {
+                        cout << "Klaida: egzamino rezultatas turi buti nuo 1 iki 10!\n";
+                    }
+                } catch (const std::exception& e) {
+                    cout << "Klaida: netinkamas egzamino rezultatas! Bandykite dar karta.\n";
+                }
+            } else {
+                cout << "Klaida: iveskite skaiciu nuo 1 iki 10! Bandykite dar karta.\n";
+            }
+        }
     }
     double sum = 0.0;
     for (int x : Laik.paz) sum += x;
@@ -218,4 +257,29 @@ bool arSkaicius(const string &str) {
         }
     }
     return true;
+}
+
+int gautiSkaiciu(const string &pranesimas) {
+    string input;
+    int skaicius;
+
+    while (true) {
+        cout << pranesimas;
+        getline(cin, input);
+
+        if (arSkaicius(input)) {
+            try {
+                skaicius = std::stoi(input);
+                if (skaicius > 0) {
+                    return skaicius;
+                } else {
+                    cout << "Klaida: skaicius turi buti teigiamas!\n";
+                }
+            } catch (const std::exception& e) {
+                cout << "Klaida: netinkamas skaicius! Bandykite dar karta.\n";
+            }
+        } else {
+            cout << "Klaida: iveskite skaiciu! Bandykite dar karta.\n";
+        }
+    }
 }
