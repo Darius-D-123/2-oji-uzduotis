@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <fstream>
+#include <sstream>
 
 using std::cout;
 using std::cin;
@@ -50,7 +51,7 @@ int main() {
              pasirinkimas != 'n' && pasirinkimas != 'N' &&
              pasirinkimas != 'f' && pasirinkimas != 'F');
     if (pasirinkimas == 'f' || pasirinkimas == 'F') {
-        Grupe = nuskaitykIsFailo("studentai10000.txt");
+        Grupe = nuskaitykIsFailo("studentai100000.txt");
     } else {
         int kiek;
         cout << "Kiek studentu norite ivesti? ";
@@ -63,17 +64,7 @@ int main() {
     }
     if (!Grupe.empty()) {
         issaugokIFaila(Grupe, "kursiokai.txt");
-        cout << "\nRezultatai:\n";
-        cout << left << setw(15) << "Pavarde" << setw(15) << "Vardas" << setw(20) << "Galutinis (Vid.)" << setw(20) << "Galutinis (Med.)" << endl;
-        cout << "---------------------------------------------------------------\n";
-        cout << fixed << setprecision(2);
-        for (auto &s : Grupe) {
-            cout << setw(15) << s.pav << setw(15) << s.vard << setw(20) << s.rez_vid << setw(20) << s.rez_med << endl;
-        }
-    } else {
-        cout << "Nera duomenu issaugojimui.\n";
     }
-
     return 0;
 }
 
@@ -130,21 +121,31 @@ vector<Studentas> nuskaitykIsFailo(const string &failoVardas) {
     }
     string headerLine;
     getline(in, headerLine);
-    string pav, vard;
-     int nd1, nd2, nd3, nd4, nd5, nd6, nd7, nd8, nd9, nd10, nd11, nd12, nd13, nd14, nd15, egz;
-    while (in >> vard >> pav >> nd1 >> nd2 >> nd3 >> nd4 >> nd5 >> nd6 >> nd7 >> nd8 >> nd9 >> nd10 >> nd11 >> nd12 >> nd13 >> nd14 >> nd15 >> egz) {
+    string line;
+    while (getline(in, line)) {
+        std::istringstream iss(line);
         Studentas s;
-        s.pav = pav;
-        s.vard = vard;
-        s.paz = {nd1, nd2, nd3, nd4, nd5, nd6, nd7, nd8, nd9, nd10, nd11, nd12, nd13, nd14, nd15};
-        s.egzas = egz;
-        double sum = 0.0;
-        for (int p : s.paz) sum += p;
-        double vid = sum / s.paz.size();
-        s.rez_vid = 0.4 * vid + 0.6 * egz;
-        s.rez_med = 0.4 * median(s.paz) + 0.6 * egz;
-        Grupe.push_back(s);
+        if (iss >> s.vard >> s.pav) {
+            s.paz.clear();
+            int pazymys;
+            while (iss >> pazymys) {
+                s.paz.push_back(pazymys);
+            }
+            if (!s.paz.empty()) {
+                s.egzas = s.paz.back();
+                s.paz.pop_back();
+            }
+            if (!s.paz.empty()) {
+                double sum = 0.0;
+                for (int p : s.paz) sum += p;
+                double vid = sum / s.paz.size();
+                s.rez_vid = 0.4 * vid + 0.6 * s.egzas;
+                s.rez_med = 0.4 * median(s.paz) + 0.6 * s.egzas;
+                Grupe.push_back(s);
+            }
+        }
     }
+    in.close();
     return Grupe;
 }
 
