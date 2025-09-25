@@ -38,11 +38,14 @@ double median(vector<int> v);
 vector<Studentas> nuskaitykIsFailo(const string &failoVardas);
 void issaugokIFaila(const vector<Studentas> &Grupe, const string &failoVardas);
 void parodykFailuSarasa();
-void rusiokStudentus(vector<Studentas> &Grupe);
+void rusiuokStudentus(vector<Studentas> &Grupe);
 bool arSkaicius(const string &str);
 int gautiSkaiciu(const string &pranesimas);
 double apskaiciuotiGalutiniVid(const Studentas &s);
 double apskaiciuotiGalutiniMed(const Studentas &s);
+int gautiSkaitineReiksmeIsPavardes(const string& pavarde);
+bool palyginkStudentusPagalSkaitineReiksme(const Studentas &a, const Studentas &b);
+
 
 int main() {
     srand(time(nullptr));
@@ -87,7 +90,7 @@ int main() {
         }
     }
     if (!Grupe.empty()) {
-        rusiokStudentus(Grupe);
+        rusiuokStudentus(Grupe);
         issaugokIFaila(Grupe, "kursiokai.txt");
     }
     return 0;
@@ -199,6 +202,7 @@ vector<Studentas> nuskaitykIsFailo(const string &failoVardas) {
     getline(in, headerLine);
     string line;
     int studentuSkaicius = 0;
+    cout << "Skaitomas failas...\n";
     while (getline(in, line)) {
         istringstream iss(line);
         Studentas s;
@@ -231,6 +235,9 @@ vector<Studentas> nuskaitykIsFailo(const string &failoVardas) {
                 s.rez_med = apskaiciuotiGalutiniMed(s);
                 Grupe.push_back(s);
                 studentuSkaicius++;
+                if (studentuSkaicius % 10000 == 0) {
+                    cout << "Nuskaityta: " << studentuSkaicius << " studentu" << endl;
+                }
             }
         }
     }
@@ -261,15 +268,9 @@ void parodykFailuSarasa() {
     cout << "3. studentai1000000.txt (1,000,000 studentu)\n";
 }
 
-bool palyginkStudentus(const Studentas &a, const Studentas &b) {
-    if (a.pav != b.pav) {
-        return a.pav < b.pav;
-    }
-    return a.vard < b.vard;
-}
 
-void rusiokStudentus(vector<Studentas> &Grupe) {
-    sort(Grupe.begin(), Grupe.end(), palyginkStudentus);
+void rusiuokStudentus(vector<Studentas> &Grupe) {
+    sort(Grupe.begin(), Grupe.end(), palyginkStudentusPagalSkaitineReiksme);
 }
 
 bool arSkaicius(const string &str) {
@@ -305,4 +306,35 @@ int gautiSkaiciu(const string &pranesimas) {
             cout << "Klaida: iveskite skaiciu! Bandykite dar karta.\n";
         }
     }
+}
+
+int gautiSkaitineReiksmeIsPavardes(const string& pavarde) {
+    string skaitmuoStr = "";
+    for (int i = pavarde.length() - 1; i >= 0; i--) {
+        if (isdigit(pavarde[i])) {
+            skaitmuoStr = pavarde[i] + skaitmuoStr;
+        } else if (!skaitmuoStr.empty()) {
+            break;
+        }
+    }
+    if (!skaitmuoStr.empty()) {
+        try {
+            return std::stoi(skaitmuoStr);
+        } catch (...) {
+            return 0;
+        }
+    }
+    return 0;
+}
+
+bool palyginkStudentusPagalSkaitineReiksme(const Studentas &a, const Studentas &b) {
+    int skaiciusA = gautiSkaitineReiksmeIsPavardes(a.pav);
+    int skaiciusB = gautiSkaitineReiksmeIsPavardes(b.pav);
+    if (skaiciusA != skaiciusB) {
+        return skaiciusA < skaiciusB;
+    }
+    if (a.pav != b.pav) {
+        return a.pav < b.pav;
+    }
+    return a.vard < b.vard;
 }
