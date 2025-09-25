@@ -62,6 +62,7 @@ int main() {
         }
     }
     if (!Grupe.empty()) {
+        issaugokIFaila(Grupe, "kursiokai.txt");
         cout << "\nRezultatai:\n";
         cout << left << setw(15) << "Pavarde" << setw(15) << "Vardas" << setw(20) << "Galutinis (Vid.)" << setw(20) << "Galutinis (Med.)" << endl;
         cout << "---------------------------------------------------------------\n";
@@ -69,7 +70,11 @@ int main() {
         for (auto &s : Grupe) {
             cout << setw(15) << s.pav << setw(15) << s.vard << setw(20) << s.rez_vid << setw(20) << s.rez_med << endl;
         }
+    } else {
+        cout << "Nera duomenu issaugojimui.\n";
     }
+
+    return 0;
 }
 
 Studentas ivesk(bool randomMode) {
@@ -126,16 +131,18 @@ vector<Studentas> nuskaitykIsFailo(const string &failoVardas) {
     string headerLine;
     getline(in, headerLine);
     string pav, vard;
-    int nd1, nd2, nd3, nd4, nd5, egz;
-    while (in >> pav >> vard >> nd1 >> nd2 >> nd3 >> nd4 >> nd5 >> egz) {
+     int nd1, nd2, nd3, nd4, nd5, nd6, nd7, nd8, nd9, nd10, nd11, nd12, nd13, nd14, nd15, egz;
+    while (in >> vard >> pav >> nd1 >> nd2 >> nd3 >> nd4 >> nd5 >> nd6 >> nd7 >> nd8 >> nd9 >> nd10 >> nd11 >> nd12 >> nd13 >> nd14 >> nd15 >> egz) {
         Studentas s;
         s.pav = pav;
         s.vard = vard;
-        s.paz = {nd1, nd2, nd3, nd4, nd5};
+        s.paz = {nd1, nd2, nd3, nd4, nd5, nd6, nd7, nd8, nd9, nd10, nd11, nd12, nd13, nd14, nd15};
         s.egzas = egz;
-        double vid = (nd1 + nd2 + nd3 + nd4 + nd5) / 5.0;
-        s.rez_vid = 0.6 * egz + 0.4 * vid;
-        s.rez_med = 0.6 * egz + 0.4 * median(s.paz);
+        double sum = 0.0;
+        for (int p : s.paz) sum += p;
+        double vid = sum / s.paz.size();
+        s.rez_vid = 0.4 * vid + 0.6 * egz;
+        s.rez_med = 0.4 * median(s.paz) + 0.6 * egz;
         Grupe.push_back(s);
     }
     return Grupe;
@@ -147,17 +154,12 @@ void issaugokIFaila(const vector<Studentas> &Grupe, const string &failoVardas) {
         cout << "Klaida: nepavyko sukurti failo " << failoVardas << endl;
         return;
     }
-    out << left << setw(15) << "Pavarde"
-        << setw(15) << "Vardas"
-        << setw(20) << "Galutinis (Vid.)"
-        << setw(20) << "Galutinis (Med.)" << endl;
+    out << left << setw(15) << "Pavarde" << setw(15) << "Vardas" << setw(20) << "Galutinis (Vid.)" << setw(20) << "Galutinis (Med.)" << endl;
     out << "---------------------------------------------------------------\n";
     out << fixed << setprecision(2);
     for (auto &s : Grupe) {
-        out << setw(15) << s.pav
-            << setw(15) << s.vard
-            << setw(20) << s.rez_vid
-            << setw(20) << s.rez_med << endl;
+        out << setw(15) << s.pav << setw(15) << s.vard << setw(20) << s.rez_vid << setw(20) << s.rez_med << endl;
     }
+    out.close();
     cout << "Rezultatai issaugoti faile " << failoVardas << endl;
 }
