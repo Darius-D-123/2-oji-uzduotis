@@ -64,12 +64,13 @@ int main() {
              pasirinkimas != 'f' && pasirinkimas != 'F');
     if (pasirinkimas == 'f' || pasirinkimas == 'F') {
         parodykFailuSarasa();
-        int failoPasirinkimas = gautiSkaiciu("Pasirinkite faila (iveskite skaiciu 1-3): ");
+        int failoPasirinkimas = gautiSkaiciu("Pasirinkite faila (iveskite skaiciu 1-4): ");
         string failoVardas;
         switch (failoPasirinkimas) {
             case 1: failoVardas = "studentai10000.txt"; break;
             case 2: failoVardas = "studentai100000.txt"; break;
             case 3: failoVardas = "studentai1000000.txt"; break;
+            case 4: failoVardas = "kursiokai.txt"; break;
             default:
                 cout << "Netinkamas pasirinkimas! Naudojamas studentai10000.txt\n";
                 failoVardas = "studentai10000.txt";
@@ -91,7 +92,7 @@ int main() {
     }
     if (!Grupe.empty()) {
         rusiuokStudentus(Grupe);
-        issaugokIFaila(Grupe, "kursiokai.txt");
+        issaugokIFaila(Grupe, "rez.txt");
     }
     return 0;
 }
@@ -266,6 +267,7 @@ void parodykFailuSarasa() {
     cout << "1. studentai10000.txt (10,000 studentu)\n";
     cout << "2. studentai100000.txt (100,000 studentu)\n";
     cout << "3. studentai1000000.txt (1,000,000 studentu)\n";
+    cout << "4. kursiokai.txt \n";
 }
 
 
