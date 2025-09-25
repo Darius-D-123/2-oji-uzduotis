@@ -21,6 +21,7 @@ using std::setprecision;
 using std::sort;
 using std::ifstream;
 using std::ofstream;
+using std::istringstream;
 
 struct Studentas {
     string vard;
@@ -35,6 +36,7 @@ Studentas ivesk(bool randomMode);
 double median(vector<int> v);
 vector<Studentas> nuskaitykIsFailo(const string &failoVardas);
 void issaugokIFaila(const vector<Studentas> &Grupe, const string &failoVardas);
+void parodykFailuSarasa();
 
 int main() {
     srand(time(nullptr));
@@ -51,7 +53,22 @@ int main() {
              pasirinkimas != 'n' && pasirinkimas != 'N' &&
              pasirinkimas != 'f' && pasirinkimas != 'F');
     if (pasirinkimas == 'f' || pasirinkimas == 'F') {
-        Grupe = nuskaitykIsFailo("studentai100000.txt");
+        parodykFailuSarasa();
+        int failoPasirinkimas;
+        cout << "Pasirinkite faila (iveskite skaiciu): ";
+        cin >> failoPasirinkimas;
+        string failoVardas;
+        switch (failoPasirinkimas) {
+            case 1: failoVardas = "studentai10000.txt"; break;
+            case 2: failoVardas = "studentai100000.txt"; break;
+            case 3: failoVardas = "studentai1000000.txt"; break;
+            default:
+                cout << "Netinkamas pasirinkimas! Naudojamas studentai10000.txt\n";
+                failoVardas = "studentai10000.txt";
+                break;
+        }
+        cout << "Skaitomas failas: " << failoVardas << endl;
+        Grupe = nuskaitykIsFailo(failoVardas);
     } else {
         int kiek;
         cout << "Kiek studentu norite ivesti? ";
@@ -122,9 +139,11 @@ vector<Studentas> nuskaitykIsFailo(const string &failoVardas) {
     string headerLine;
     getline(in, headerLine);
     string line;
+    int studentuSkaicius = 0;
     while (getline(in, line)) {
-        std::istringstream iss(line);
+        istringstream iss(line);
         Studentas s;
+        int pazymys;
         if (iss >> s.vard >> s.pav) {
             s.paz.clear();
             int pazymys;
@@ -142,8 +161,12 @@ vector<Studentas> nuskaitykIsFailo(const string &failoVardas) {
                 s.rez_vid = 0.4 * vid + 0.6 * s.egzas;
                 s.rez_med = 0.4 * median(s.paz) + 0.6 * s.egzas;
                 Grupe.push_back(s);
+                studentuSkaicius++;
             }
+             if (studentuSkaicius % 10000 == 0) {
+            cout << "Nuskaityta studentu: " << studentuSkaicius << endl;
         }
+    }
     }
     in.close();
     return Grupe;
@@ -163,4 +186,11 @@ void issaugokIFaila(const vector<Studentas> &Grupe, const string &failoVardas) {
     }
     out.close();
     cout << "Rezultatai issaugoti faile " << failoVardas << endl;
+}
+
+void parodykFailuSarasa() {
+    cout << "\nGalimi failai:\n";
+    cout << "1. studentai10000.txt (10,000 studentu)\n";
+    cout << "2. studentai100000.txt (100,000 studentu)\n";
+    cout << "3. studentai1000000.txt (1,000,000 studentu)\n";
 }
