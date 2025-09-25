@@ -37,10 +37,14 @@ int main() {
     cout << "Kiek studentu norite ivesti? ";
     cin >> kiek;
     do {
-    cout << "Ar generuoti pazymius atsitiktinai? (t/n): ";
+    cout << "Pasirinkite veiksma:\n";
+    cout << "  t - generuoti atsitiktinai\n";
+    cout << "  n - ivesti ranka\n";
+    cout << "  f - nuskaityti is failo\n";
     cin >> pasirinkimas;
        } while (pasirinkimas != 't' && pasirinkimas != 'T' &&
-         pasirinkimas != 'n' && pasirinkimas != 'N');
+             pasirinkimas != 'n' && pasirinkimas != 'N' &&
+             pasirinkimas != 'f' && pasirinkimas != 'F');
     bool randomMode = (pasirinkimas == 't' || pasirinkimas == 'T');
     for (int j = 0; j < kiek; j++) {
         cout << "\n--- Studentas " << j + 1 << " ---\n";
