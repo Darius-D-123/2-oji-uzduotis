@@ -41,6 +41,8 @@ void parodykFailuSarasa();
 void rusiokStudentus(vector<Studentas> &Grupe);
 bool arSkaicius(const string &str);
 int gautiSkaiciu(const string &pranesimas);
+double apskaiciuotiGalutiniVid(const Studentas &s);
+double apskaiciuotiGalutiniMed(const Studentas &s);
 
 int main() {
     srand(time(nullptr));
@@ -153,12 +155,26 @@ Studentas ivesk(bool randomMode) {
             }
         }
     }
-    double sum = 0.0;
-    for (int x : Laik.paz) sum += x;
-    double vid = Laik.paz.empty() ? 0 : sum / Laik.paz.size();
-    Laik.rez_vid = 0.6 * Laik.egzas + 0.4 * vid;
-    Laik.rez_med = 0.6 * Laik.egzas + 0.4 * median(Laik.paz);
+    Laik.rez_vid = apskaiciuotiGalutiniVid(Laik);
+    Laik.rez_med = apskaiciuotiGalutiniMed(Laik);
     return Laik;
+}
+
+double apskaiciuotiGalutiniVid(const Studentas &s) {
+    if (s.paz.empty()) {
+        return 0.6 * s.egzas;
+    }
+    double sum = 0.0;
+    for (int x : s.paz) sum += x;
+    double vid = sum / s.paz.size();
+    return 0.6 * s.egzas + 0.4 * vid;
+}
+
+double apskaiciuotiGalutiniMed(const Studentas &s) {
+    if (s.paz.empty()) {
+        return 0.6 * s.egzas;
+    }
+    return 0.6 * s.egzas + 0.4 * median(s.paz);
 }
 
 double median(vector<int> v) {
@@ -186,30 +202,37 @@ vector<Studentas> nuskaitykIsFailo(const string &failoVardas) {
     while (getline(in, line)) {
         istringstream iss(line);
         Studentas s;
-        int pazymys;
         if (iss >> s.vard >> s.pav) {
             s.paz.clear();
-            int pazymys;
-            while (iss >> pazymys) {
-                s.paz.push_back(pazymys);
+            string token;
+            vector<int> visiPazymiai;
+            bool klaidaEiluteje = false;
+            while (iss >> token) {
+                if (arSkaicius(token)) {
+                    try {
+                        int skaicius = std::stoi(token);
+                        if (skaicius >= 1 && skaicius <= 10) {
+                            visiPazymiai.push_back(skaicius);
+                        } else {
+                            klaidaEiluteje = true;
+                        }
+                    } catch (const std::exception& e) {
+                        klaidaEiluteje = true;
+                    }
+                } else {
+                    klaidaEiluteje = true;
+                }
             }
-            if (!s.paz.empty()) {
-                s.egzas = s.paz.back();
-                s.paz.pop_back();
-            }
-            if (!s.paz.empty()) {
-                double sum = 0.0;
-                for (int p : s.paz) sum += p;
-                double vid = sum / s.paz.size();
-                s.rez_vid = 0.4 * vid + 0.6 * s.egzas;
-                s.rez_med = 0.4 * median(s.paz) + 0.6 * s.egzas;
+            if (!klaidaEiluteje && !visiPazymiai.empty()) {
+                s.egzas = visiPazymiai.back();
+                visiPazymiai.pop_back();
+                s.paz = visiPazymiai;
+                s.rez_vid = apskaiciuotiGalutiniVid(s);
+                s.rez_med = apskaiciuotiGalutiniMed(s);
                 Grupe.push_back(s);
                 studentuSkaicius++;
             }
-             if (studentuSkaicius % 10000 == 0) {
-            cout << "Nuskaityta studentu: " << studentuSkaicius << endl;
         }
-    }
     }
     in.close();
     return Grupe;
