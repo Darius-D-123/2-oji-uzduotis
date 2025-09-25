@@ -37,6 +37,7 @@ double median(vector<int> v);
 vector<Studentas> nuskaitykIsFailo(const string &failoVardas);
 void issaugokIFaila(const vector<Studentas> &Grupe, const string &failoVardas);
 void parodykFailuSarasa();
+void rusiokStudentus(vector<Studentas> &Grupe);
 
 int main() {
     srand(time(nullptr));
@@ -80,6 +81,7 @@ int main() {
         }
     }
     if (!Grupe.empty()) {
+        rusiokStudentus(Grupe);
         issaugokIFaila(Grupe, "kursiokai.txt");
     }
     return 0;
@@ -179,7 +181,7 @@ void issaugokIFaila(const vector<Studentas> &Grupe, const string &failoVardas) {
         return;
     }
     out << left << setw(15) << "Pavarde" << setw(15) << "Vardas" << setw(20) << "Galutinis (Vid.)" << setw(20) << "Galutinis (Med.)" << endl;
-    out << "---------------------------------------------------------------\n";
+    out << string(70, '-') << endl;
     out << fixed << setprecision(2);
     for (auto &s : Grupe) {
         out << setw(15) << s.pav << setw(15) << s.vard << setw(20) << s.rez_vid << setw(20) << s.rez_med << endl;
@@ -193,4 +195,15 @@ void parodykFailuSarasa() {
     cout << "1. studentai10000.txt (10,000 studentu)\n";
     cout << "2. studentai100000.txt (100,000 studentu)\n";
     cout << "3. studentai1000000.txt (1,000,000 studentu)\n";
+}
+
+bool palyginkStudentus(const Studentas &a, const Studentas &b) {
+    if (a.pav != b.pav) {
+        return a.pav < b.pav;
+    }
+    return a.vard < b.vard;
+}
+
+void rusiokStudentus(vector<Studentas> &Grupe) {
+    sort(Grupe.begin(), Grupe.end(), palyginkStudentus);
 }
