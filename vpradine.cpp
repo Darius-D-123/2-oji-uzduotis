@@ -22,6 +22,7 @@ using std::sort;
 using std::ifstream;
 using std::ofstream;
 using std::istringstream;
+using std::getline;
 
 struct Studentas {
     string vard;
@@ -38,6 +39,7 @@ vector<Studentas> nuskaitykIsFailo(const string &failoVardas);
 void issaugokIFaila(const vector<Studentas> &Grupe, const string &failoVardas);
 void parodykFailuSarasa();
 void rusiokStudentus(vector<Studentas> &Grupe);
+bool arSkaicius(const string &str);
 
 int main() {
     srand(time(nullptr));
@@ -206,4 +208,14 @@ bool palyginkStudentus(const Studentas &a, const Studentas &b) {
 
 void rusiokStudentus(vector<Studentas> &Grupe) {
     sort(Grupe.begin(), Grupe.end(), palyginkStudentus);
+}
+
+bool arSkaicius(const string &str) {
+    if (str.empty()) return false;
+    for (char c : str) {
+        if (!isdigit(c) && c != '-' && c != '+') {
+            return false;
+        }
+    }
+    return true;
 }
