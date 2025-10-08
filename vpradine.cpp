@@ -46,6 +46,8 @@ double apskaiciuotiGalutiniMed(const Studentas &s);
 int gautiSkaitineReiksmeIsPavardes(const string& pavarde);
 bool palyginkStudentusPagalSkaitineReiksme(const Studentas &a, const Studentas &b);
 void generuotiStudentuFailus();
+void padalinkStudentus(const vector<Studentas> &Grupe, vector<Studentas> &Vargsai, vector<Studentas> &Kietiakiai);
+void issaugokPadalintusStudentus(const vector<Studentas> &Vargsai, const vector<Studentas> &Kietiakiai);
 
 int main() {
     srand(time(nullptr));
@@ -103,8 +105,55 @@ int main() {
     if (!Grupe.empty()) {
         rusiuokStudentus(Grupe);
         issaugokIFaila(Grupe, "rez.txt");
+        vector<Studentas> Vargsai, Kietiakiai;
+        padalinkStudentus(Grupe, Vargsai, Kietiakiai);
+        issaugokPadalintusStudentus(Vargsai, Kietiakiai);
     }
     return 0;
+}
+
+void padalinkStudentus(const vector<Studentas> &Grupe, vector<Studentas> &Vargsai, vector<Studentas> &Kietiakiai) {
+    for (const auto &studentas : Grupe) {
+        if (studentas.rez_vid < 5.0) {
+            Vargsai.push_back(studentas);
+        } else {
+            Kietiakiai.push_back(studentas);
+        }
+    }
+    rusiuokStudentus(Vargsai);
+    rusiuokStudentus(Kietiakiai);
+    cout << "Studentai suskirstyti i dvi grupes:\n";
+    cout << "Vargsai (galutinis < 5.0): " << Vargsai.size() << " studentai\n";
+    cout << "Kietiakiai (galutinis >= 5.0): " << Kietiakiai.size() << " studentai\n";
+}
+
+void issaugokPadalintusStudentus(const vector<Studentas> &Vargsai, const vector<Studentas> &Kietiakiai) {
+    ofstream outVargsai("vargsai.txt");
+    if (!outVargsai) {
+        cout << "Klaida: nepavyko sukurti failo vargsai.txt" << endl;
+        return;
+    }
+    outVargsai << left << setw(20) << "Pavarde" << setw(20) << "Vardas" << setw(20) << "Galutinis (Vid.)" << setw(20) << "Galutinis (Med.)" << endl;
+    outVargsai << string(70, '-') << endl;
+    outVargsai << fixed << setprecision(2);
+    for (auto &s : Vargsai) {
+        outVargsai << setw(20) << s.pav << setw(20) << s.vard << setw(20) << s.rez_vid << setw(20) << s.rez_med << endl;
+    }
+    outVargsai.close();
+    cout << "Vargsai issaugoti faile vargsai.txt (" << Vargsai.size() << " studentai)" << endl;
+    ofstream outKietiakiai("kietiakiai.txt");
+    if (!outKietiakiai) {
+        cout << "Klaida: nepavyko sukurti failo kietiakiai.txt" << endl;
+        return;
+    }
+    outKietiakiai << left << setw(20) << "Pavarde" << setw(20) << "Vardas" << setw(20) << "Galutinis (Vid.)" << setw(20) << "Galutinis (Med.)" << endl;
+    outKietiakiai << string(70, '-') << endl;
+    outKietiakiai << fixed << setprecision(2);
+    for (auto &s : Kietiakiai) {
+        outKietiakiai << setw(20) << s.pav << setw(20) << s.vard << setw(20) << s.rez_vid << setw(20) << s.rez_med << endl;
+    }
+    outKietiakiai.close();
+    cout << "Kietiakiai issaugoti faile kietiakiai.txt (" << Kietiakiai.size() << " studentai)" << endl;
 }
 
 void generuotiStudentuFailus() {
