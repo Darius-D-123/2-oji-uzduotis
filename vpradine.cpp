@@ -27,10 +27,10 @@ using std::getline;
 struct Studentas {
     string vard;
     string pav;
-    vector<int> paz;
     int egzas;
     double rez_vid;
     double rez_med;
+    vector<int> paz;
 };
 
 Studentas ivesk(bool randomMode);
@@ -45,13 +45,21 @@ double apskaiciuotiGalutiniVid(const Studentas &s);
 double apskaiciuotiGalutiniMed(const Studentas &s);
 int gautiSkaitineReiksmeIsPavardes(const string& pavarde);
 bool palyginkStudentusPagalSkaitineReiksme(const Studentas &a, const Studentas &b);
-
+void generuotiStudentuFailus();
 
 int main() {
     srand(time(nullptr));
     vector<Studentas> Grupe;
     int kiek;
     char pasirinkimas;
+    cout << "Ar norite generuoti studentu failus? (t/n): ";
+    char generuotiFailus;
+    cin >> generuotiFailus;
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    if (generuotiFailus == 't' || generuotiFailus == 'T') {
+        generuotiStudentuFailus();
+        cout << "Studentu failai sugeneruoti sekmingai!\n\n";
+    }
     do {
     cout << "Pasirinkite veiksma:\n";
     cout << "  t - generuoti atsitiktinai\n";
@@ -64,13 +72,15 @@ int main() {
              pasirinkimas != 'f' && pasirinkimas != 'F');
     if (pasirinkimas == 'f' || pasirinkimas == 'F') {
         parodykFailuSarasa();
-        int failoPasirinkimas = gautiSkaiciu("Pasirinkite faila (iveskite skaiciu 1-4): ");
+        int failoPasirinkimas = gautiSkaiciu("Pasirinkite faila (iveskite skaiciu 1-6): ");
         string failoVardas;
         switch (failoPasirinkimas) {
-            case 1: failoVardas = "studentai10000.txt"; break;
-            case 2: failoVardas = "studentai100000.txt"; break;
-            case 3: failoVardas = "studentai1000000.txt"; break;
-            case 4: failoVardas = "kursiokai.txt"; break;
+            case 1: failoVardas = "studentai1000.txt"; break;
+            case 2: failoVardas = "studentai10000.txt"; break;
+            case 3: failoVardas = "studentai100000.txt"; break;
+            case 4: failoVardas = "studentai1000000.txt"; break;
+            case 5: failoVardas = "studentai10000000.txt"; break;
+            case 6: failoVardas = "kursiokai.txt"; break;
             default:
                 cout << "Netinkamas pasirinkimas! Naudojamas studentai10000.txt\n";
                 failoVardas = "studentai10000.txt";
@@ -95,6 +105,37 @@ int main() {
         issaugokIFaila(Grupe, "rez.txt");
     }
     return 0;
+}
+
+void generuotiStudentuFailus() {
+    vector<int> dydziai = {1000, 10000, 100000, 1000000, 10000000};
+    for (int dydis : dydziai) {
+        string failoVardas = "studentai" + std::to_string(dydis) + ".txt";
+        cout << "Kuriamas failas: " << failoVardas << "..." << endl;
+        ofstream out(failoVardas);
+        if (!out) {
+            cout << "Klaida: nepavyko sukurti failo " << failoVardas << endl;
+            continue;
+        }
+        out << left << setw(20) << "Vardas" << setw(20) << "Pavarde";
+        for (int i = 1; i <= 10; i++) {
+            out << setw(10) << "ND" + std::to_string(i);
+        }
+        out << setw(10) << "Egz." << endl;
+        for (int i = 1; i <= dydis; i++) {
+            out << setw(20) << "Vardas" + std::to_string(i)
+                << setw(20) << "Pavarde" + std::to_string(i);
+            for (int j = 0; j < 10; j++) {
+                out << setw(10) << (rand() % 10 + 1);
+            }
+            out << setw(10) << (rand() % 10 + 1) << endl;
+            if (dydis >= 100000 && i % (dydis / 10) == 0) {
+                cout << "Sugeneruota: " << (i * 100 / dydis) << "%" << endl;
+            }
+        }
+        out.close();
+        cout << "Failas " << failoVardas << " sekmingai sukurtas (" << dydis << " irasu)" << endl;
+    }
 }
 
 Studentas ivesk(bool randomMode) {
@@ -199,10 +240,22 @@ vector<Studentas> nuskaitykIsFailo(const string &failoVardas) {
         cout << "Klaida: nepavyko atidaryti failo " << failoVardas << endl;
         return Grupe;
     }
+    string line;
+    int studentuSkaicius = -1;
+    while (getline(in, line)) {
+        studentuSkaicius++;
+    }
+    if (studentuSkaicius <= 0) {
+        cout << "Failas tuscias arba neturi duomenu!\n";
+        in.close();
+        return Grupe;
+    }
+    Grupe.reserve(studentuSkaicius);
+    in.clear();
+    in.seekg(0);
     string headerLine;
     getline(in, headerLine);
-    string line;
-    int studentuSkaicius = 0;
+    int nuskaityta = 0;
     cout << "Skaitomas failas...\n";
     while (getline(in, line)) {
         istringstream iss(line);
@@ -235,9 +288,10 @@ vector<Studentas> nuskaitykIsFailo(const string &failoVardas) {
                 s.rez_vid = apskaiciuotiGalutiniVid(s);
                 s.rez_med = apskaiciuotiGalutiniMed(s);
                 Grupe.push_back(s);
-                studentuSkaicius++;
-                if (studentuSkaicius % 10000 == 0) {
-                    cout << "Nuskaityta: " << studentuSkaicius << " studentu" << endl;
+                nuskaityta++;
+                if (studentuSkaicius >= 10000 && nuskaityta % 10000 == 0) {
+                    cout << "Nuskaityta: " << nuskaityta << " is " << studentuSkaicius
+                         << " (" << (nuskaityta * 100 / studentuSkaicius) << "%)" << endl;
                 }
             }
         }
@@ -264,10 +318,12 @@ void issaugokIFaila(const vector<Studentas> &Grupe, const string &failoVardas) {
 
 void parodykFailuSarasa() {
     cout << "\nGalimi failai:\n";
-    cout << "1. studentai10000.txt (10,000 studentu)\n";
-    cout << "2. studentai100000.txt (100,000 studentu)\n";
-    cout << "3. studentai1000000.txt (1,000,000 studentu)\n";
-    cout << "4. kursiokai.txt \n";
+    cout << "1. studentai1000.txt (1,000 studentu)\n";
+    cout << "2. studentai10000.txt (10,000 studentu)\n";
+    cout << "3. studentai100000.txt (100,000 studentu)\n";
+    cout << "4. studentai1000000.txt (1,000,000 studentu)\n";
+    cout << "5. studentai10000000.txt (10,000,000 studentu)\n";
+    cout << "6. kursiokai.txt \n";
 }
 
 
