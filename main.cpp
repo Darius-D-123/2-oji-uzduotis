@@ -14,6 +14,14 @@ using std::string;
 using std::vector;
 
 int main() {
+     cout << "Ar norite atlikti failu kurimo testavima? (t/n): ";
+    char testavimoPasirinkimas;
+    cin >> testavimoPasirinkimas;
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    if (testavimoPasirinkimas == 't' || testavimoPasirinkimas == 'T') {
+        testuotiProgramosSparta();
+    } else {
     srand(time(nullptr));
     vector<Studentas> Grupe;
     char pasirinkimas;
@@ -73,4 +81,5 @@ int main() {
         issaugokPadalintusStudentus(Vargsai, Kietiakiai);
     }
     return 0;
+    }
 }
