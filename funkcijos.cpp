@@ -8,6 +8,7 @@
 #include <ctime>
 #include <fstream>
 #include <sstream>
+#include <chrono>
 #include "studentas.h"
 #include "funkcijos.h"
 
@@ -25,6 +26,8 @@ using std::ifstream;
 using std::ofstream;
 using std::istringstream;
 using std::getline;
+using std::to_string;
+using namespace std::chrono;
 
 Studentas ivesk(bool randomMode) {
     Studentas Laik;
@@ -39,7 +42,6 @@ Studentas ivesk(bool randomMode) {
         Laik.egzas = rand() % 10 + 1;
         cout << "Sugeneruoti " << n << " pazymiai ir egzaminas.\n";
     } else {
-        int m;
         cout << "Iveskite pazymius (baigti su 'q' arba ne skaiciumi):\n";
         string input;
         int pazymiuKiekis = 0;
@@ -262,6 +264,43 @@ void generuotiStudentuFailus() {
     }
 }
 
+double testuotiFailuKurima() {
+    cout << "        FAILU KURIMO TESTAVIMAS \n";
+    vector<int> dydziai = {1000, 10000, 100000, 1000000, 10000000};
+    double bendrasLaikas = 0.0;
+    for (int dydis : dydziai) {
+        string failoVardas = "studentai" + to_string(dydis) + ".txt";
+        cout << "Kuriamas failas: " << failoVardas << endl;
+        auto start = high_resolution_clock::now();
+        ofstream out(failoVardas);
+        if (!out) {
+            cout << "KLAIDA: nepavyko sukurti failo " << failoVardas << endl;
+            continue;
+        }
+        out << left << setw(20) << "Vardas" << setw(20) << "Pavarde";
+        for (int i = 1; i <= 10; i++) {
+            out << setw(10) << "ND" + to_string(i);
+        }
+        out << setw(10) << "Egz." << endl;
+        for (int i = 1; i <= dydis; i++) {
+            out << setw(20) << "Vardas" + std::to_string(i)
+                << setw(20) << "Pavarde" + std::to_string(i);
+            for (int j = 0; j < 10; j++) {
+                out << setw(10) << (rand() % 10 + 1);
+            }
+            out << setw(10) << (rand() % 10 + 1) << endl;
+        }
+        out.close();
+        auto end = high_resolution_clock::now();
+        duration<double> diff = end - start;
+        cout << fixed << setprecision(6);
+        cout << "[" << dydis << "] irasu failo kurimo laikas: " << diff.count() << "s" << endl;
+        cout << "Failas " << failoVardas << " sekmingai sukurtas\n\n";
+    }
+    cout << "Visi failai sugeneruoti sekmingai!\n";
+    return 0.0;
+}
+
 double median(vector<int> v) {
     if (v.empty()) return 0.0;
     sort(v.begin(), v.end());
@@ -373,4 +412,10 @@ int gautiSkaitineReiksmeIsPavardes(const string& pavarde) {
         }
     }
     return 0;
+}
+
+void testuotiProgramosSparta() {
+    cout << "        FAILU KURIMO SPARTOS TESTAVIMAS\n";
+    testuotiFailuKurima();
+    cout << "        TESTAVIMAS BAIGTAS\n";
 }
