@@ -15,6 +15,7 @@ void issaugokPadalintusStudentus(const vector<Studentas> &Vargsai, const vector<
 
 vector<Studentas> nuskaitykIsFailo(const string &failoVardas);
 void generuotiStudentuFailus();
+double testuotiFailuKurima();
 
 double median(vector<int> v);
 double apskaiciuotiGalutiniVid(const Studentas &s);
@@ -27,5 +28,7 @@ bool palyginkStudentusPagalSkaitineReiksme(const Studentas &a, const Studentas &
 bool arSkaicius(const string &str);
 int gautiSkaiciu(const string &pranesimas);
 int gautiSkaitineReiksmeIsPavardes(const string& pavarde);
+
+void testuotiProgramosSparta();
 
 #endif
