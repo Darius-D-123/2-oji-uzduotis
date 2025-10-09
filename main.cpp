@@ -14,7 +14,7 @@ using std::string;
 using std::vector;
 
 int main() {
-     cout << "Ar norite atlikti failu kurimo testavima? (t/n): ";
+     cout << "Ar norite atlikti greicio testavima? (t/n): ";
     char testavimoPasirinkimas;
     cin >> testavimoPasirinkimas;
     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
