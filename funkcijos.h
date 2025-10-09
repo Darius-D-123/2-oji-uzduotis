@@ -30,5 +30,6 @@ int gautiSkaiciu(const string &pranesimas);
 int gautiSkaitineReiksmeIsPavardes(const string& pavarde);
 
 void testuotiProgramosSparta();
+void testuotiPasirinktaFaila(int dydis);
 
 #endif
