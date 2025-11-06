@@ -159,8 +159,9 @@ void issaugokPadalintusStudentus(const Container &Vargsai, const Container &Kiet
     cout << "Kietiakiai issaugoti faile kietiakiai.txt (" << Kietiakiai.size() << " studentai)" << endl;
 }
 
-vector<Studentas> nuskaitykIsFailo(const string &failoVardas) {
-    vector<Studentas> Grupe;
+template<typename Container>
+Container nuskaitykIsFailo(const string &failoVardas) {
+    Container Grupe;
     ifstream in(failoVardas);
     if (!in) {
         cout << "Klaida: nepavyko atidaryti failo " << failoVardas << endl;
@@ -179,7 +180,6 @@ vector<Studentas> nuskaitykIsFailo(const string &failoVardas) {
         return Grupe;
     }
 
-    Grupe.reserve(studentuSkaicius);
     in.clear();
     in.seekg(0);
     string headerLine;
@@ -333,8 +333,9 @@ double apskaiciuotiGalutiniMed(const Studentas &s) {
     return 0.6 * s.egzas + 0.4 * median(s.paz);
 }
 
-void rusiuokStudentus(vector<Studentas> &Grupe) {
-    sort(Grupe.begin(), Grupe.end(), palyginkStudentusPagalSkaitineReiksme);
+template<typename Container>
+void rusiuokStudentus(Container &Grupe) {
+    Grupe.sort(palyginkStudentusPagalSkaitineReiksme);
 }
 
 void padalinkStudentus(const vector<Studentas> &Grupe, vector<Studentas> &Vargsai, vector<Studentas> &Kietiakiai) {
@@ -523,4 +524,5 @@ void testuotiPasirinktaFaila(int dydis) {
     duration<double> kietLaikas = kietEnd - kietStart;
     cout << kietLaikas.count() << "s\n";
 }
+
 
