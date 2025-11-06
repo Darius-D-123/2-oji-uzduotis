@@ -3,17 +3,22 @@
 
 #include <string>
 #include <vector>
+#include <list>
 #include "studentas.h"
 
 using std::string;
 using std::vector;
+using std::list;
 
 Studentas ivesk(bool randomMode);
 void parodykFailuSarasa();
-void issaugokIFaila(const vector<Studentas> &Grupe, const string &failoVardas);
-void issaugokPadalintusStudentus(const vector<Studentas> &Vargsai, const vector<Studentas> &Kietiakiai);
+template<typename Container>
+void issaugokIFaila(const Container &Grupe, const string &failoVardas);
+template<typename Container>
+void issaugokPadalintusStudentus(const Container &Vargsai, const Container &Kietiakiai);
 
-vector<Studentas> nuskaitykIsFailo(const string &failoVardas);
+template<typename Container>
+Container nuskaitykIsFailo(const string &failoVardas);
 void generuotiStudentuFailus();
 double testuotiFailuKurima();
 
@@ -21,8 +26,10 @@ double median(vector<int> v);
 double apskaiciuotiGalutiniVid(const Studentas &s);
 double apskaiciuotiGalutiniMed(const Studentas &s);
 
-void rusiuokStudentus(vector<Studentas> &Grupe);
-void padalinkStudentus(const vector<Studentas> &Grupe, vector<Studentas> &Vargsai, vector<Studentas> &Kietiakiai);
+template<typename Container>
+void rusiuokStudentus(Container &Grupe);
+template<typename Container>
+void padalinkStudentus(const Container &Grupe, Container &Vargsai, Container &Kietiakiai);
 bool palyginkStudentusPagalSkaitineReiksme(const Studentas &a, const Studentas &b);
 
 bool arSkaicius(const string &str);
@@ -30,6 +37,8 @@ int gautiSkaiciu(const string &pranesimas);
 int gautiSkaitineReiksmeIsPavardes(const string& pavarde);
 
 void testuotiProgramosSparta();
+template<typename Container>
 void testuotiPasirinktaFaila(int dydis);
+
 
 #endif
