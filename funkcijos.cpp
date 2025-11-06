@@ -343,7 +343,8 @@ void rusiuokStudentus<std::vector<Studentas>>(std::vector<Studentas> &Grupe) {
     sort(Grupe.begin(), Grupe.end(), palyginkStudentusPagalSkaitineReiksme);
 }
 
-void padalinkStudentus(const vector<Studentas> &Grupe, vector<Studentas> &Vargsai, vector<Studentas> &Kietiakiai) {
+template<typename Container>
+void padalinkStudentus(const Container &Grupe, Container &Vargsai, Container &Kietiakiai) {
     for (const auto &studentas : Grupe) {
         if (studentas.rez_vid < 5.0) {
             Vargsai.push_back(studentas);
@@ -529,6 +530,7 @@ void testuotiPasirinktaFaila(int dydis) {
     duration<double> kietLaikas = kietEnd - kietStart;
     cout << kietLaikas.count() << "s\n";
 }
+
 
 
 
