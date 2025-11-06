@@ -9,6 +9,8 @@
 #include <fstream>
 #include <sstream>
 #include <chrono>
+#include <list>
+#include <type_traits>
 #include "studentas.h"
 #include "funkcijos.h"
 
@@ -27,6 +29,7 @@ using std::ofstream;
 using std::istringstream;
 using std::getline;
 using std::to_string;
+using std::list;
 using namespace std::chrono;
 
 Studentas ivesk(bool randomMode) {
@@ -108,7 +111,8 @@ void parodykFailuSarasa() {
     cout << "6. kursiokai.txt \n";
 }
 
-void issaugokIFaila(const vector<Studentas> &Grupe, const string &failoVardas) {
+template<typename Container>
+void issaugokIFaila(const Container &Grupe, const string &failoVardas) {
     ofstream out(failoVardas);
     if (!out) {
         cout << "Klaida: nepavyko sukurti failo " << failoVardas << endl;
@@ -124,7 +128,8 @@ void issaugokIFaila(const vector<Studentas> &Grupe, const string &failoVardas) {
     cout << "Rezultatai issaugoti faile " << failoVardas << endl;
 }
 
-void issaugokPadalintusStudentus(const vector<Studentas> &Vargsai, const vector<Studentas> &Kietiakiai) {
+template<typename Container>
+void issaugokPadalintusStudentus(const Container &Vargsai, const Container &Kietiakiai) {
     ofstream outVargsai("vargsai.txt");
     if (!outVargsai) {
         cout << "Klaida: nepavyko sukurti failo vargsai.txt" << endl;
@@ -518,3 +523,4 @@ void testuotiPasirinktaFaila(int dydis) {
     duration<double> kietLaikas = kietEnd - kietStart;
     cout << kietLaikas.count() << "s\n";
 }
+
