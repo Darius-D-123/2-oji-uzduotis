@@ -488,7 +488,11 @@ void testuotiPasirinktaFaila(int dydis) {
     auto nuskaitymoEnd = high_resolution_clock::now();
     duration<double> nuskaitymoLaikas = nuskaitymoEnd - nuskaitymoStart;
     cout << "nuskaitymo laikas: " << nuskaitymoLaikas.count() << "s\n";
-    cout << "Rusiavimas: ";
+    if (std::is_same<Container, std::vector<Studentas>>::value) {
+        cout << "Rusiavimas su pradiniu vektoriumi: ";
+    } else {
+        cout << "Rusiavimas: ";
+    }
     auto rusStart1 = high_resolution_clock::now();
     Container GrupeRusiavimui = Grupe;
     rusiuokStudentus(GrupeRusiavimui);
@@ -498,17 +502,47 @@ void testuotiPasirinktaFaila(int dydis) {
     cout << "Studentu dalijimas i dvi grupes: ";
     auto gruStart = high_resolution_clock::now();
     Container Vargsai, Kietiakiai;
-    padalinkStudentus(Grupe, Vargsai, Kietiakiai);
+    for (const auto &studentas : Grupe) {
+        if (studentas.rez_vid < 5.0) {
+            Vargsai.push_back(studentas);
+        } else {
+            Kietiakiai.push_back(studentas);
+        }
+    }
+    rusiuokStudentus(Vargsai);
+    rusiuokStudentus(Kietiakiai);
     auto gruEnd = high_resolution_clock::now();
     duration<double> gruLaikas = gruEnd - gruStart;
     cout << gruLaikas.count() << "s\n";
-    cout << "Irasymo i failus laikas: ";
-    auto irasymoStart = high_resolution_clock::now();
-    issaugokPadalintusStudentus(Vargsai, Kietiakiai);
-    auto irasymoEnd = high_resolution_clock::now();
-    duration<double> irasymoLaikas = irasymoEnd - irasymoStart;
-    cout << irasymoLaikas.count() << "s\n";
+    cout << "Vargsu irasymo i faila laikas: ";
+    auto vargsaiStart = high_resolution_clock::now();
+    ofstream vargsaiOut("vargsai.txt");
+    vargsaiOut << left << setw(20) << "Pavarde" << setw(20) << "Vardas" << setw(20) << "Galutinis (Vid.)" << setw(20) << "Galutinis (Med.)" << endl;
+    vargsaiOut << string(70, '-') << endl;
+    vargsaiOut << fixed << setprecision(2);
+    for (auto &s : Vargsai) {
+        vargsaiOut << setw(20) << s.pav << setw(20) << s.vard << setw(20) << s.rez_vid << setw(20) << s.rez_med << endl;
+    }
+    vargsaiOut.close();
+    auto vargsaiEnd = high_resolution_clock::now();
+    duration<double> vargsaiLaikas = vargsaiEnd - vargsaiStart;
+    cout << vargsaiLaikas.count() << "s\n";
+    cout << "Kietiakiai irasymo i faila laikas: ";
+    auto kietStart = high_resolution_clock::now();
+    ofstream kietiakiaiOut("kietiakiai.txt");
+    kietiakiaiOut << left << setw(20) << "Pavarde" << setw(20) << "Vardas" << setw(20) << "Galutinis (Vid.)" << setw(20) << "Galutinis (Med.)" << endl;
+    kietiakiaiOut << string(70, '-') << endl;
+    kietiakiaiOut << fixed << setprecision(2);
+    for (auto &s : Kietiakiai) {
+        kietiakiaiOut << setw(20) << s.pav << setw(20) << s.vard << setw(20) << s.rez_vid << setw(20) << s.rez_med << endl;
+    }
+    kietiakiaiOut.close();
+    auto kietEnd = high_resolution_clock::now();
+    duration<double> kietLaikas = kietEnd - kietStart;
+    cout << kietLaikas.count() << "s\n";
 }
+
+
 
 
 
