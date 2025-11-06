@@ -542,6 +542,19 @@ void testuotiPasirinktaFaila(int dydis) {
     cout << kietLaikas.count() << "s\n";
 }
 
+template void issaugokIFaila<std::vector<Studentas>>(const std::vector<Studentas> &Grupe, const string &failoVardas);
+template void issaugokIFaila<std::list<Studentas>>(const std::list<Studentas> &Grupe, const string &failoVardas);
+template void issaugokPadalintusStudentus<std::vector<Studentas>>(const std::vector<Studentas> &Vargsai, const std::vector<Studentas> &Kietiakiai);
+template void issaugokPadalintusStudentus<std::list<Studentas>>(const std::list<Studentas> &Vargsai, const std::list<Studentas> &Kietiakiai);
+template std::vector<Studentas> nuskaitykIsFailo<std::vector<Studentas>>(const string &failoVardas);
+template std::list<Studentas> nuskaitykIsFailo<std::list<Studentas>>(const string &failoVardas);
+template void rusiuokStudentus<std::vector<Studentas>>(std::vector<Studentas> &Grupe);
+template void rusiuokStudentus<std::list<Studentas>>(std::list<Studentas> &Grupe);
+template void padalinkStudentus<std::vector<Studentas>>(const std::vector<Studentas> &Grupe, std::vector<Studentas> &Vargsai, std::vector<Studentas> &Kietiakiai);
+template void padalinkStudentus<std::list<Studentas>>(const std::list<Studentas> &Grupe, std::list<Studentas> &Vargsai, std::list<Studentas> &Kietiakiai);
+template void testuotiPasirinktaFaila<std::vector<Studentas>>(int dydis);
+template void testuotiPasirinktaFaila<std::list<Studentas>>(int dydis);
+
 
 
 
