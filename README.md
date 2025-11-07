@@ -32,8 +32,10 @@ SSD - Crucial P3 M.2 500GB <br />
 
 
 
-<img width="404" height="303" alt="image" src="https://github.com/user-attachments/assets/f3858852-1d39-4027-8f32-fcdf6792b69e" />
+<img width="348" height="307" alt="image" src="https://github.com/user-attachments/assets/b68e1cd0-01b5-432e-9de5-179f28757904" />
 
-<img width="410" height="296" alt="image" src="https://github.com/user-attachments/assets/cfa956aa-2a70-4954-ba31-d9fd5f299dfa" />
+
+<img width="340" height="317" alt="image" src="https://github.com/user-attachments/assets/c76cc278-a9f1-49c4-ba06-f921b2c03046" />
+
 
 
