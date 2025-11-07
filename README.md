@@ -29,19 +29,6 @@ SSD - Crucial P3 M.2 500GB <br />
 | std::vector | 10 mil | 37.91 s | 206.66 s | 194.08 s | 13.42 s | 13.42 s |
 | std::list | 10 mil| 39.58 s | 85.55 s | 85.47 s | 13.53 s | 19.24 s |
 
-### std::vector vidurkiai:
-Nuskaitymas: 1.086 s <br />
-Rūšiavimas: 4.509 s  <br />
-Dalijimas: 4.219 s <br />
-Vargšų įrašymas: 0.267 s <br />
-Kietiakų įrašymas: 0.383 s <br />
-
-### std::list vidurkiai:
-Nuskaitymas: 1.089 s <br />
-Rūšiavimas: 1.932 s <br />
-Dalijimas: 1.786 s <br />
-Vargšų įrašymas: 0.267 s <br />
-Kietiakų įrašymas: 0.391 s <br />
 
 
 
