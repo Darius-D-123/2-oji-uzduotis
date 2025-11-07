@@ -457,7 +457,7 @@ void testuotiProgramosSparta() {
             dydis = 1000;
         }
         cout << "        FAILO SPARTOS ANALIZE\n";
-        testuotiPasirinktaFaila(dydis);
+        testuotiPasirinktaFaila<std::vector<Studentas>>(dydis);
     } else {
         cout << "Netinkamas pasirinkimas!\n";
     }
@@ -554,6 +554,7 @@ template void padalinkStudentus<std::vector<Studentas>>(const std::vector<Studen
 template void padalinkStudentus<std::list<Studentas>>(const std::list<Studentas> &Grupe, std::list<Studentas> &Vargsai, std::list<Studentas> &Kietiakiai);
 template void testuotiPasirinktaFaila<std::vector<Studentas>>(int dydis);
 template void testuotiPasirinktaFaila<std::list<Studentas>>(int dydis);
+
 
 
 
