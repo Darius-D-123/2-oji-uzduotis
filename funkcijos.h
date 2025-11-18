@@ -29,7 +29,11 @@ double apskaiciuotiGalutiniMed(const Studentas &s);
 template<typename Container>
 void rusiuokStudentus(Container &Grupe);
 template<typename Container>
-void padalinkStudentus(const Container &Grupe, Container &Vargsai, Container &Kietiakiai);
+void padalinkStudentus1(const Container &Grupe, Container &Vargsai, Container &Kietiakiai);
+template<typename Container>
+void padalinkStudentus2(Container &Grupe, Container &Vargsai);
+template<typename Container>
+void padalinkStudentus3(Container &Grupe, Container &Vargsai);
 bool palyginkStudentusPagalSkaitineReiksme(const Studentas &a, const Studentas &b);
 
 bool arSkaicius(const string &str);
@@ -42,3 +46,4 @@ void testuotiPasirinktaFaila(int dydis);
 
 
 #endif
+
