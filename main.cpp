@@ -22,49 +22,26 @@ int main() {
     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     if (testavimoPasirinkimas == 't' || testavimoPasirinkimas == 'T') {
-        cout << "Pasirinkite konteineri:\n";
-        cout << "1 - std::vector\n";
-        cout << "2 - std::list\n";
-        cout << "Jusu pasirinkimas (1 arba 2): ";
-        char konteinerioPasirinkimas;
-        cin >> konteinerioPasirinkimas;
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-        if (konteinerioPasirinkimas == '1') {
-            cout << "\nPasirinkite testavimo varianta:\n";
-            cout << "1 - Failu kurimo testavimas\n";
-            cout << "2 - Programos veikimo testavimas (nuskaitymas/rusiavimas/isvedimas)\n";
+        cout << "Pasirinkite testavimo varianta:\n";
+        cout << "1 - Failu kurimo testavimas\n";
+        cout << "2 - Programos veikimo testavimas (nuskaitymas/rusiavimas/isvedimas)\n";
+        cout << "3 - Strategiju palyginimo testavimas\n";
+        cout << "Jusu pasirinkimas (1, 2 arba 3): ";
+        string pasirinkimas;
+        getline(cin, pasirinkimas);
+        
+        if (pasirinkimas == "1") {
+            cout << "         FAILU KURIMO TESTAVIMAS \n";
+            testuotiFailuKurima();
+        } else if (pasirinkimas == "2") {
+            cout << "\nPasirinkite konteineri:\n";
+            cout << "1 - std::vector\n";
+            cout << "2 - std::list\n";
             cout << "Jusu pasirinkimas (1 arba 2): ";
-            string pasirinkimas;
-            getline(cin, pasirinkimas);
-            if (pasirinkimas == "1") {
-                cout << "         FAILU KURIMO TESTAVIMAS \n";
-                testuotiFailuKurima();
-            } else if (pasirinkimas == "2") {
-                cout << "\nPasirinkite failo dydi:\n";
-                cout << "1 - 1000 irasu\n";
-                cout << "2 - 10000 irasu\n";
-                cout << "3 - 100000 irasu\n";
-                cout << "4 - 1000000 irasu\n";
-                cout << "5 - 10000000 irasu\n";
-                cout << "Jusu pasirinkimas (1-5): ";
-                string dydzioPasirinkimas;
-                getline(cin, dydzioPasirinkimas);
-                int dydis = 0;
-                if (dydzioPasirinkimas == "1") dydis = 1000;
-                else if (dydzioPasirinkimas == "2") dydis = 10000;
-                else if (dydzioPasirinkimas == "3") dydis = 100000;
-                else if (dydzioPasirinkimas == "4") dydis = 1000000;
-                else if (dydzioPasirinkimas == "5") dydis = 10000000;
-                else {
-                    cout << "Netinkamas pasirinkimas! Naudojamas 1000 irasu.\n";
-                    dydis = 1000;
-                }
-                testuotiPasirinktaFaila<vector<Studentas>>(dydis);
-            } else {
-                cout << "Netinkamas pasirinkimas!\n";
-            }
-        } else if (konteinerioPasirinkimas == '2') {
+            char konteinerioPasirinkimas;
+            cin >> konteinerioPasirinkimas;
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            
             cout << "\nPasirinkite failo dydi:\n";
             cout << "1 - 1000 irasu\n";
             cout << "2 - 10000 irasu\n";
@@ -84,10 +61,54 @@ int main() {
                 cout << "Netinkamas pasirinkimas! Naudojamas 1000 irasu.\n";
                 dydis = 1000;
             }
-            testuotiPasirinktaFaila<list<Studentas>>(dydis);
+            
+            if (konteinerioPasirinkimas == '1') {
+                testuotiPasirinktaFaila<vector<Studentas>>(dydis);
+            } else if (konteinerioPasirinkimas == '2') {
+                testuotiPasirinktaFaila<list<Studentas>>(dydis);
+            } else {
+                cout << "Netinkamas pasirinkimas! Naudojamas std::vector.\n";
+                testuotiPasirinktaFaila<vector<Studentas>>(dydis);
+            }
+        } else if (pasirinkimas == "3") {
+            cout << "\nPasirinkite konteineri:\n";
+            cout << "1 - std::vector\n";
+            cout << "2 - std::list\n";
+            cout << "Jusu pasirinkimas (1 arba 2): ";
+            char konteinerioPasirinkimas;
+            cin >> konteinerioPasirinkimas;
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            
+            cout << "\nPasirinkite failo dydi:\n";
+            cout << "1 - 1000 irasu\n";
+            cout << "2 - 10000 irasu\n";
+            cout << "3 - 100000 irasu\n";
+            cout << "4 - 1000000 irasu\n";
+            cout << "5 - 10000000 irasu\n";
+            cout << "Jusu pasirinkimas (1-5): ";
+            string dydzioPasirinkimas;
+            getline(cin, dydzioPasirinkimas);
+            int dydis = 0;
+            if (dydzioPasirinkimas == "1") dydis = 1000;
+            else if (dydzioPasirinkimas == "2") dydis = 10000;
+            else if (dydzioPasirinkimas == "3") dydis = 100000;
+            else if (dydzioPasirinkimas == "4") dydis = 1000000;
+            else if (dydzioPasirinkimas == "5") dydis = 10000000;
+            else {
+                cout << "Netinkamas pasirinkimas! Naudojamas 1000 irasu.\n";
+                dydis = 1000;
+            }
+            
+            if (konteinerioPasirinkimas == '1') {
+                testuotiVisasStrategijas<vector<Studentas>>(dydis);
+            } else if (konteinerioPasirinkimas == '2') {
+                testuotiVisasStrategijas<list<Studentas>>(dydis);
+            } else {
+                cout << "Netinkamas pasirinkimas! Naudojamas std::vector.\n";
+                testuotiVisasStrategijas<vector<Studentas>>(dydis);
+            }
         } else {
-            cout << "Netinkamas pasirinkimas! Naudojamas std::vector.\n";
-            testuotiProgramosSparta();
+            cout << "Netinkamas pasirinkimas!\n";
         }
         cout << "        TESTAVIMAS BAIGTAS\n";
     } else {
@@ -154,3 +175,4 @@ int main() {
 
     return 0;
 }
+
