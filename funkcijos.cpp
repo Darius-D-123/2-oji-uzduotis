@@ -433,7 +433,7 @@ int gautiSkaiciu(const string &pranesimas) {
 
 int gautiSkaitineReiksmeIsPavardes(const string& pavarde) {
     string skaitmuoStr = "";
-    for (int i = pavarde.length() - 1; i >= 0; i--) {
+    for (size_t i = pavarde.length() - 1; i != static_cast<size_t>(-1); i--) {
         if (isdigit(pavarde[i])) {
             skaitmuoStr = pavarde[i] + skaitmuoStr;
         } else if (!skaitmuoStr.empty()) {
@@ -451,11 +451,11 @@ int gautiSkaitineReiksmeIsPavardes(const string& pavarde) {
 }
 
 void testuotiProgramosSparta() {
-
     cout << "Pasirinkite testavimo varianta:\n";
     cout << "1 - Failu kurimo testavimas\n";
     cout << "2 - Programos veikimo testavimas (nuskaitymas/rusiavimas/isvedimas)\n";
-    cout << "Jusu pasirinkimas (1 arba 2): ";
+    cout << "3 - Strategiju palyginimo testavimas\n";
+    cout << "Jusu pasirinkimas (1, 2 arba 3): ";
     string pasirinkimas;
     getline(cin, pasirinkimas);
     if (pasirinkimas == "1") {
@@ -483,6 +483,39 @@ void testuotiProgramosSparta() {
         }
         cout << "        FAILO SPARTOS ANALIZE\n";
         testuotiPasirinktaFaila<std::vector<Studentas>>(dydis);
+    } else if (pasirinkimas == "3") {
+        cout << "\nPasirinkite failo dydi:\n";
+        cout << "1 - 1000 irasu\n";
+        cout << "2 - 10000 irasu\n";
+        cout << "3 - 100000 irasu\n";
+        cout << "4 - 1000000 irasu\n";
+        cout << "Jusu pasirinkimas (1-4): ";
+        string dydzioPasirinkimas;
+        getline(cin, dydzioPasirinkimas);
+        int dydis = 0;
+        if (dydzioPasirinkimas == "1") dydis = 1000;
+        else if (dydzioPasirinkimas == "2") dydis = 10000;
+        else if (dydzioPasirinkimas == "3") dydis = 100000;
+        else if (dydzioPasirinkimas == "4") dydis = 1000000;
+        else {
+            cout << "Netinkamas pasirinkimas! Naudojamas 1000 irasu.\n";
+            dydis = 1000;
+        }
+        cout << "\nPasirinkite konteineri:\n";
+        cout << "1 - std::vector\n";
+        cout << "2 - std::list\n";
+        cout << "Jusu pasirinkimas (1 arba 2): ";
+        string konteinerioPasirinkimas;
+        getline(cin, konteinerioPasirinkimas);
+        
+        if (konteinerioPasirinkimas == "1") {
+            testuotiVisasStrategijas<std::vector<Studentas>>(dydis);
+        } else if (konteinerioPasirinkimas == "2") {
+            testuotiVisasStrategijas<std::list<Studentas>>(dydis);
+        } else {
+            cout << "Netinkamas pasirinkimas! Naudojamas std::vector.\n";
+            testuotiVisasStrategijas<std::vector<Studentas>>(dydis);
+        }
     } else {
         cout << "Netinkamas pasirinkimas!\n";
     }
@@ -513,29 +546,16 @@ void testuotiPasirinktaFaila(int dydis) {
     auto nuskaitymoEnd = high_resolution_clock::now();
     duration<double> nuskaitymoLaikas = nuskaitymoEnd - nuskaitymoStart;
     cout << "nuskaitymo laikas: " << nuskaitymoLaikas.count() << "s\n";
-    if (std::is_same<Container, std::vector<Studentas>>::value) {
-        cout << "Rusiavimas su pradiniu vektoriumi: ";
-    } else {
-        cout << "Rusiavimas: ";
-    }
-    auto rusStart1 = high_resolution_clock::now();
-    Container GrupeRusiavimui = Grupe;
-    rusiuokStudentus(GrupeRusiavimui);
-    auto rusEnd1 = high_resolution_clock::now();
-    duration<double> rusLaikas1 = rusEnd1 - rusStart1;
-    cout << rusLaikas1.count() << "s\n";
-    cout << "Studentu dalijimas i dvi grupes: ";
+    cout << "Studentu rusiavimas: ";
+    auto rusStart = high_resolution_clock::now();
+    rusiuokStudentus(Grupe);
+    auto rusEnd = high_resolution_clock::now();
+    duration<double> rusLaikas = rusEnd - rusStart;
+    cout << rusLaikas.count() << "s\n";
+    cout << "Studentu dalijimas i dvi grupes (3 strategija): ";
     auto gruStart = high_resolution_clock::now();
-    Container Vargsai, Kietiakiai;
-    for (const auto &studentas : Grupe) {
-        if (studentas.rez_vid < 5.0) {
-            Vargsai.push_back(studentas);
-        } else {
-            Kietiakiai.push_back(studentas);
-        }
-    }
-    rusiuokStudentus(Vargsai);
-    rusiuokStudentus(Kietiakiai);
+    Container Vargsai, Kietiakiai = Grupe;
+    padalinkStudentus3(Kietiakiai, Vargsai);
     auto gruEnd = high_resolution_clock::now();
     duration<double> gruLaikas = gruEnd - gruStart;
     cout << gruLaikas.count() << "s\n";
@@ -567,6 +587,56 @@ void testuotiPasirinktaFaila(int dydis) {
     cout << kietLaikas.count() << "s\n";
 }
 
+template<typename Container>
+void testuotiVisasStrategijas(int dydis) {
+    string failoVardas = "studentai" + std::to_string(dydis) + ".txt";
+    ifstream testas(failoVardas);
+    if (!testas) {
+        cout << "KLAIDA: Failas " << failoVardas << " nerastas!\n";
+        cout << "Pirmiausia sugeneruokite failus pasirinkdami 1 varianta.\n";
+        return;
+    }
+    testas.close();
+    cout << "\n=== STRATEGIJU PALYGINIMAS SU " << dydis << " IRASU ===";
+    if (std::is_same<Container, std::vector<Studentas>>::value) {
+        cout << " (std::vector) ===\n";
+    } else {
+        cout << " (std::list) ===\n";
+    }
+    cout << "Nuskaitomas failas... ";
+    auto nuskaitymoStart = high_resolution_clock::now();
+    Container Grupe = nuskaitykIsFailo<Container>(failoVardas);
+    auto nuskaitymoEnd = high_resolution_clock::now();
+    duration<double> nuskaitymoLaikas = nuskaitymoEnd - nuskaitymoStart;
+    cout << "nuskaitymo laikas: " << nuskaitymoLaikas.count() << "s\n";
+    cout << "nuskaityta " << Grupe.size() << " studentu\n\n";
+    cout << fixed << setprecision(6);
+    cout << "1 STRATEGIJA (dvi kopijos):\n";
+    Container Grupe1 = Grupe;
+    Container Vargsai1, Kietiakiai1;
+    auto start1 = high_resolution_clock::now();
+    padalinkStudentus1(Grupe1, Vargsai1, Kietiakiai1);
+    auto end1 = high_resolution_clock::now();
+    duration<double> laikas1 = end1 - start1;
+    cout << "Laikas: " << laikas1.count() << "s\n";
+    cout << "2 STRATEGIJA (remove_if):\n";
+    Container Grupe2 = Grupe;
+    Container Vargsai2;
+    auto start2 = high_resolution_clock::now();
+    padalinkStudentus2(Grupe2, Vargsai2);
+    auto end2 = high_resolution_clock::now();
+    duration<double> laikas2 = end2 - start2;
+    cout << "Laikas: " << laikas2.count() << "s\n";
+    cout << "3 STRATEGIJA (stable_partition):\n";
+    Container Grupe3 = Grupe;
+    Container Vargsai3;
+    auto start3 = high_resolution_clock::now();
+    padalinkStudentus3(Grupe3, Vargsai3);
+    auto end3 = high_resolution_clock::now();
+    duration<double> laikas3 = end3 - start3;
+    cout << "Laikas: " << laikas3.count() << "s\n";
+}
+
 template void issaugokIFaila<std::vector<Studentas>>(const std::vector<Studentas> &Grupe, const string &failoVardas);
 template void issaugokIFaila<std::list<Studentas>>(const std::list<Studentas> &Grupe, const string &failoVardas);
 template void issaugokPadalintusStudentus<std::vector<Studentas>>(const std::vector<Studentas> &Vargsai, const std::vector<Studentas> &Kietiakiai);
@@ -575,10 +645,16 @@ template std::vector<Studentas> nuskaitykIsFailo<std::vector<Studentas>>(const s
 template std::list<Studentas> nuskaitykIsFailo<std::list<Studentas>>(const string &failoVardas);
 template void rusiuokStudentus<std::vector<Studentas>>(std::vector<Studentas> &Grupe);
 template void rusiuokStudentus<std::list<Studentas>>(std::list<Studentas> &Grupe);
-template void padalinkStudentus<std::vector<Studentas>>(const std::vector<Studentas> &Grupe, std::vector<Studentas> &Vargsai, std::vector<Studentas> &Kietiakiai);
-template void padalinkStudentus<std::list<Studentas>>(const std::list<Studentas> &Grupe, std::list<Studentas> &Vargsai, std::list<Studentas> &Kietiakiai);
+template void padalinkStudentus1<std::vector<Studentas>>(const std::vector<Studentas> &Grupe, std::vector<Studentas> &Vargsai, std::vector<Studentas> &Kietiakiai);
+template void padalinkStudentus1<std::list<Studentas>>(const std::list<Studentas> &Grupe, std::list<Studentas> &Vargsai, std::list<Studentas> &Kietiakiai);
+template void padalinkStudentus2<std::vector<Studentas>>(std::vector<Studentas> &Grupe, std::vector<Studentas> &Vargsai);
+template void padalinkStudentus2<std::list<Studentas>>(std::list<Studentas> &Grupe, std::list<Studentas> &Vargsai);
+template void padalinkStudentus3<std::vector<Studentas>>(std::vector<Studentas> &Grupe, std::vector<Studentas> &Vargsai);
+template void padalinkStudentus3<std::list<Studentas>>(std::list<Studentas> &Grupe, std::list<Studentas> &Vargsai);
 template void testuotiPasirinktaFaila<std::vector<Studentas>>(int dydis);
 template void testuotiPasirinktaFaila<std::list<Studentas>>(int dydis);
+template void testuotiVisasStrategijas<std::vector<Studentas>>(int dydis);
+template void testuotiVisasStrategijas<std::list<Studentas>>(int dydis);
 
 
 
