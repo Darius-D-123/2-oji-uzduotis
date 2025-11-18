@@ -43,7 +43,10 @@ int gautiSkaitineReiksmeIsPavardes(const string& pavarde);
 void testuotiProgramosSparta();
 template<typename Container>
 void testuotiPasirinktaFaila(int dydis);
+template<typename Container>
+void testuotiVisasStrategijas(int dydis);
 
 
 #endif
+
 
