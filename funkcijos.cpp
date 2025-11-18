@@ -323,7 +323,7 @@ double apskaiciuotiGalutiniVid(const Studentas &s) {
     }
     double sum = 0.0;
     for (int x : s.paz) sum += x;
-    double vid = sum / s.paz.size();
+    double vid = sum / static_cast<double>(s.paz.size());
     return 0.6 * s.egzas + 0.4 * vid;
 }
 
@@ -654,6 +654,7 @@ template void testuotiPasirinktaFaila<std::vector<Studentas>>(int dydis);
 template void testuotiPasirinktaFaila<std::list<Studentas>>(int dydis);
 template void testuotiVisasStrategijas<std::vector<Studentas>>(int dydis);
 template void testuotiVisasStrategijas<std::list<Studentas>>(int dydis);
+
 
 
 
