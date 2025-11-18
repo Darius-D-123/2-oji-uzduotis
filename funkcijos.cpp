@@ -273,7 +273,6 @@ void generuotiStudentuFailus() {
 
 double testuotiFailuKurima() {
     vector<int> dydziai = {1000, 10000, 100000, 1000000, 10000000};
-    double bendrasLaikas = 0.0;
     for (int dydis : dydziai) {
         string failoVardas = "studentai" + to_string(dydis) + ".txt";
         cout << "Kuriamas failas: " << failoVardas << endl;
@@ -655,6 +654,7 @@ template void testuotiPasirinktaFaila<std::vector<Studentas>>(int dydis);
 template void testuotiPasirinktaFaila<std::list<Studentas>>(int dydis);
 template void testuotiVisasStrategijas<std::vector<Studentas>>(int dydis);
 template void testuotiVisasStrategijas<std::list<Studentas>>(int dydis);
+
 
 
 
