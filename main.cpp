@@ -112,7 +112,8 @@ int main() {
         }
         cout << "        TESTAVIMAS BAIGTAS\n";
     } else {
-        srand(time(nullptr));
+        // Originali programos dalis
+        srand(static_cast<unsigned int>(time(nullptr)));
         vector<Studentas> Grupe;
         char pasirinkimas;
         cout << "Ar norite generuoti studentu failus? (t/n): ";
@@ -175,4 +176,5 @@ int main() {
 
     return 0;
 }
+
 
