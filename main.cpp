@@ -112,7 +112,6 @@ int main() {
         }
         cout << "        TESTAVIMAS BAIGTAS\n";
     } else {
-        // Originali programos dalis
         srand(static_cast<unsigned int>(time(nullptr)));
         vector<Studentas> Grupe;
         char pasirinkimas;
@@ -168,13 +167,16 @@ int main() {
         if (!Grupe.empty()) {
             rusiuokStudentus(Grupe);
             issaugokIFaila(Grupe, "rez.txt");
-            vector<Studentas> Vargsai, Kietiakiai;
-            padalinkStudentus(Grupe, Vargsai, Kietiakiai);
+            vector<Studentas> Vargsai, Kietiakiai = Grupe;
+            padalinkStudentus3(Kietiakiai, Vargsai);
+            cout << "Studentai suskirstyti i dvi grupes:\n";
+            cout << "Vargsai (galutinis < 5.0): " << Vargsai.size() << " studentai\n";
+            cout << "Kietiakiai (galutinis >= 5.0): " << Kietiakiai.size() << " studentai\n";
             issaugokPadalintusStudentus(Vargsai, Kietiakiai);
         }
     }
-
     return 0;
 }
+
 
 
