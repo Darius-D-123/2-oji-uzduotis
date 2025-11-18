@@ -11,6 +11,7 @@
 #include <chrono>
 #include <list>
 #include <type_traits>
+#include <iterator>
 #include "studentas.h"
 #include "funkcijos.h"
 
@@ -30,6 +31,7 @@ using std::istringstream;
 using std::getline;
 using std::to_string;
 using std::list;
+using std::back_inserter;
 using namespace std::chrono;
 
 Studentas ivesk(bool randomMode) {
@@ -344,7 +346,7 @@ void rusiuokStudentus<std::vector<Studentas>>(std::vector<Studentas> &Grupe) {
 }
 
 template<typename Container>
-void padalinkStudentus(const Container &Grupe, Container &Vargsai, Container &Kietiakiai) {
+void padalinkStudentus1(const Container &Grupe, Container &Vargsai, Container &Kietiakiai) {
     for (const auto &studentas : Grupe) {
         if (studentas.rez_vid < 5.0) {
             Vargsai.push_back(studentas);
@@ -354,9 +356,32 @@ void padalinkStudentus(const Container &Grupe, Container &Vargsai, Container &Ki
     }
     rusiuokStudentus(Vargsai);
     rusiuokStudentus(Kietiakiai);
-    cout << "Studentai suskirstyti i dvi grupes:\n";
-    cout << "Vargsai (galutinis < 5.0): " << Vargsai.size() << " studentai\n";
-    cout << "Kietiakiai (galutinis >= 5.0): " << Kietiakiai.size() << " studentai\n";
+}
+
+template<typename Container>
+void padalinkStudentus2(Container &Grupe, Container &Vargsai) {
+    auto it = std::remove_if(Grupe.begin(), Grupe.end(), [&Vargsai](const Studentas& s) {
+        if (s.rez_vid < 5.0) {
+            Vargsai.push_back(s);
+            return true;
+        }
+        return false;
+    });
+    Grupe.erase(it, Grupe.end());
+    rusiuokStudentus(Vargsai);
+    rusiuokStudentus(Grupe);
+}
+
+template<typename Container>
+void padalinkStudentus3(Container &Grupe, Container &Vargsai) {
+    auto partition_point = std::stable_partition(Grupe.begin(), Grupe.end(), 
+        [](const Studentas& s) { return s.rez_vid >= 5.0; });
+    
+    Vargsai.assign(partition_point, Grupe.end());
+    Grupe.erase(partition_point, Grupe.end());
+    
+    rusiuokStudentus(Vargsai);
+    rusiuokStudentus(Grupe);
 }
 
 bool palyginkStudentusPagalSkaitineReiksme(const Studentas &a, const Studentas &b) {
@@ -554,6 +579,7 @@ template void padalinkStudentus<std::vector<Studentas>>(const std::vector<Studen
 template void padalinkStudentus<std::list<Studentas>>(const std::list<Studentas> &Grupe, std::list<Studentas> &Vargsai, std::list<Studentas> &Kietiakiai);
 template void testuotiPasirinktaFaila<std::vector<Studentas>>(int dydis);
 template void testuotiPasirinktaFaila<std::list<Studentas>>(int dydis);
+
 
 
 
