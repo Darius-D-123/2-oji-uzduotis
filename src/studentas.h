@@ -40,6 +40,12 @@ public:
     bool operator>(const Studentas& other) const;
 };
 
+bool palyginkPagalPavarde(const Studentas& a, const Studentas& b);
+bool palyginkPagalVarda(const Studentas& a, const Studentas& b);
+bool palyginkPagalGalutini(const Studentas& a, const Studentas& b);
+std::istream& operator>>(std::istream& is, Studentas& studentas);
+std::ostream& operator<<(std::ostream& os, const Studentas& studentas);
 
 #endif
+
 
