@@ -453,10 +453,10 @@ void testuotiPasirinktaFaila(int dydis) {
     auto rusEnd = high_resolution_clock::now();
     duration<double> rusLaikas = rusEnd - rusStart;
     cout << rusLaikas.count() << "s\n";
-    cout << "Studentu dalijimas i dvi grupes (3 strategija): ";
+    cout << "Studentu dalijimas i dvi grupes: ";
     auto gruStart = high_resolution_clock::now();
     Container Vargsai, Kietiakiai = Grupe;
-    padalinkStudentus3(Kietiakiai, Vargsai);
+    padalinkStudentus2(Kietiakiai, Vargsai);
     auto gruEnd = high_resolution_clock::now();
     duration<double> gruLaikas = gruEnd - gruStart;
     cout << gruLaikas.count() << "s\n";
@@ -556,3 +556,4 @@ template void testuotiPasirinktaFaila<std::vector<Studentas>>(int dydis);
 template void testuotiPasirinktaFaila<std::list<Studentas>>(int dydis);
 template void testuotiVisasStrategijas<std::vector<Studentas>>(int dydis);
 template void testuotiVisasStrategijas<std::list<Studentas>>(int dydis);
+
