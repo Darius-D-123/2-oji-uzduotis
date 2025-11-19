@@ -125,3 +125,23 @@ Remiantis testavimais, matome, kad 2 strategija yra šiek tiek greitesnė už ki
    - `t` - generuoti atsitiktinai
    - `n` - įvesti ranka
    - `f` - nuskaityti iš failo
+
+
+# 2-oji užduotis
+
+## Releasai
+
+### v1.1
+
+Šioje versijoje `struct Studentas` pakeistas į `class Studentas` ir realizuoti konstruktoriai ir destruktoriai.
+
+#### Testavimai
+
+Testavimas atliktas buvo 5 kartus visais atvejais su 100 tūkstančių, 1 milijonų studentų įrašų ir išvesti jų vidurkiai.
+
+|  Studentas tipas |  Konteinerio tipas | Įrašų skaičius | Nuskaitymas | Rūšiavimas | Dalijimas | Vargšų įrašymas | Kietiakų įrašymas |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| struct | std::list | 100 k | 1.18 s | 2.08 s | 2.07 s | 0.30 s | 0.45 s |
+| class | std::list | 100 k | 0.22 s | 0.02 s | 0.04 s | 0.15 s | 0.22 s |
+| struct | std::list | 1 mil | 12.66 s | 29.28 s | 28.93 s | 3.09 s | 4.77 s |
+| class | std::list | 1 mil | 2.28 s | 0.23 s | 0.45 s | 1.46 s | 2.13 s |
