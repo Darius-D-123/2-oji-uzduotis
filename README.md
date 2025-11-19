@@ -145,3 +145,24 @@ Testavimas atliktas buvo 5 kartus visais atvejais su 100 tūkstančių, 1 milijo
 | class | std::list | 100 k | 0.22 s | 0.02 s | 0.04 s | 0.15 s | 0.22 s |
 | struct | std::list | 1 mil | 12.66 s | 29.28 s | 28.93 s | 3.09 s | 4.77 s |
 | class | std::list | 1 mil | 2.28 s | 0.23 s | 0.45 s | 1.46 s | 2.13 s |
+
+#### Išvados
+
+Remiantis testavimais, matome, kad konvertavimas iš struct į class suteikė nuo 10 iki 12 kartų greičio padidinimą, ypač pastebimą su dideliais duomenų kiekiais.
+
+#### Testavimai
+
+Testavimas atliktas buvo 5 kartus visais atvejais su 1 milijonų, 10 milijonų studentų įrašų ir išvesti jų vidurkiai.
+
+|  Optimizavimas |  EXE Dydis | Įrašų skaičius | Nuskaitymas | Rūšiavimas | Dalijimas | Vargšų įrašymas | Kietiakų įrašymas |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| O1 | 273.32 KB | 1 mil | 2.30 s | 0.24 s | 0.45 s | 1.34 s | 2.04 s |
+| O2 | 270.82 KB | 1 mil | 2.26 s | 0.24 s | 0.45 s | 1.34 s | 2.02 s |
+| O3 | 267.23 KB | 1 mil | 2.24 s | 0.22 s | 0.43 s | 1.33 s | 1.99 s |
+| O1 | 273.32 KB | 10 mil | 22.85 s | 2.96 s | 4.92 s | 13.59 s | 19.58 m |
+| O2 | 270.82 KB | 10 mil | 22.41 s | 2.99 s | 4.94 s | 13.44 s | 19.40 s |
+| O3 | 267.23 KB | 10 mil | 22.20 s | 2.74 s | 4.69 s | 13.43 s | 19.36 s |
+
+#### Išvados
+
+Remiantis testavimais, matome, kad optimizavimo lygiai O1, O2 ir O3 suteikė nuo 2% iki 7% papildomą greičio padidinimą, o didžiausias efektas pasiektas su O3 optimizavimu ir dideliais duomenų kiekiais.
