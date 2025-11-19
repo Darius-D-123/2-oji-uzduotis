@@ -161,7 +161,7 @@ int main() {
             bool randomMode = (pasirinkimas == 't' || pasirinkimas == 'T');
             for (int j = 0; j < kiek; j++) {
                 cout << "\n--- Studentas " << j + 1 << " ---\n";
-                Grupe.push_back(ivesk(randomMode));
+                Grupe.push_back(ivestiStudenta(randomMode));
             }
         }
         if (!Grupe.empty()) {
@@ -177,6 +177,3 @@ int main() {
     }
     return 0;
 }
-
-
-
