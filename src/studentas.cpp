@@ -5,7 +5,6 @@
 #include <random>
 #include <stdexcept>
 
-// Pagalbinės funkcijos
 double median(std::vector<int> v) {
     if (v.empty()) return 0.0;
     std::sort(v.begin(), v.end());
@@ -17,7 +16,6 @@ double median(std::vector<int> v) {
     }
 }
 
-// Konstruktoriai
 Studentas::Studentas() 
     : vardas_(""), pavarde_(""), egzaminas_(0), 
       rezultatas_vidurkis_(0.0), rezultatas_mediana_(0.0) {
@@ -32,7 +30,6 @@ Studentas::Studentas(std::istream& is) {
     readStudent(is);
 }
 
-// Kopijavimo konstruktorius
 Studentas::Studentas(const Studentas& other)
     : vardas_(other.vardas_), pavarde_(other.pavarde_),
       egzaminas_(other.egzaminas_), pazymiai_(other.pazymiai_),
@@ -40,7 +37,6 @@ Studentas::Studentas(const Studentas& other)
       rezultatas_mediana_(other.rezultatas_mediana_) {
 }
 
-// Kopijavimo priskyrimo operatorius
 Studentas& Studentas::operator=(const Studentas& other) {
     if (this != &other) {
         vardas_ = other.vardas_;
@@ -53,29 +49,21 @@ Studentas& Studentas::operator=(const Studentas& other) {
     return *this;
 }
 
-// Destruktorius
 Studentas::~Studentas() {
-    // Dinaminės ištekliai automatiškai valomi
 }
 
-// Privati funkcija rezultatų skaičiavimui
 void Studentas::skaiciuotiRezultatus() {
     if (pazymiai_.empty()) {
         rezultatas_vidurkis_ = 0.6 * egzaminas_;
         rezultatas_mediana_ = 0.6 * egzaminas_;
         return;
     }
-
-    // Vidurkio skaičiavimas
     double suma = std::accumulate(pazymiai_.begin(), pazymiai_.end(), 0.0);
     double vidurkis = suma / pazymiai_.size();
     rezultatas_vidurkis_ = 0.6 * egzaminas_ + 0.4 * vidurkis;
-
-    // Medianos skaičiavimas
     rezultatas_mediana_ = 0.6 * egzaminas_ + 0.4 * median(pazymiai_);
 }
 
-// Set'eriai
 void Studentas::setVardas(const std::string& vardas) {
     if (vardas.empty()) {
         throw std::invalid_argument("Vardas negali buti tuscias");
@@ -116,7 +104,6 @@ void Studentas::addPazymys(int pazymys) {
     skaiciuotiRezultatus();
 }
 
-// Ivesties operacija
 std::istream& Studentas::readStudent(std::istream& is, bool randomMode) {
     if (!is) return is;
 
@@ -128,7 +115,7 @@ std::istream& Studentas::readStudent(std::istream& is, bool randomMode) {
 
     if (randomMode) {
         pazymiai_.clear();
-        int n = rand() % 8 + 3; // 3-10 pažymių
+        int n = rand() % 8 + 3;
         for (int i = 0; i < n; i++) {
             pazymiai_.push_back(rand() % 10 + 1);
         }
@@ -150,7 +137,6 @@ std::istream& Studentas::readStudent(std::istream& is, bool randomMode) {
                 }
                 break;
             }
-            
             try {
                 int pazymys = std::stoi(input);
                 if (pazymys >= 1 && pazymys <= 10) {
@@ -163,7 +149,6 @@ std::istream& Studentas::readStudent(std::istream& is, bool randomMode) {
                 std::cout << "Netinkamas pazymys! Bandykite dar karta.\n";
             }
         }
-
         while (true) {
             std::string egzInput;
             std::cout << "Iveskite egzamino rezultata (1-10): ";
@@ -185,7 +170,6 @@ std::istream& Studentas::readStudent(std::istream& is, bool randomMode) {
     return is;
 }
 
-// Isvesties operacija
 void Studentas::display(std::ostream& os) const {
     os << "Vardas: " << vardas_ << ", Pavarde: " << pavarde_
        << ", Egzaminas: " << egzaminas_ << ", Pazymiai: ";
@@ -197,7 +181,6 @@ void Studentas::display(std::ostream& os) const {
        << ", Galutinis (Med.): " << rezultatas_mediana_;
 }
 
-// Operatoriai
 bool Studentas::operator<(const Studentas& other) const {
     return pavarde_ < other.pavarde_ || 
           (pavarde_ == other.pavarde_ && vardas_ < other.vardas_);
@@ -207,7 +190,6 @@ bool Studentas::operator>(const Studentas& other) const {
     return other < *this;
 }
 
-// Globalios palyginimo funkcijos
 bool palyginkPagalPavarde(const Studentas& a, const Studentas& b) {
     return a.pavarde() < b.pavarde();
 }
@@ -220,7 +202,6 @@ bool palyginkPagalGalutini(const Studentas& a, const Studentas& b) {
     return a.rezultatasVidurkis() < b.rezultatasVidurkis();
 }
 
-// Globalūs I/O operatoriai
 std::istream& operator>>(std::istream& is, Studentas& studentas) {
     return studentas.readStudent(is);
 }
