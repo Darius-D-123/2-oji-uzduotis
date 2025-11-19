@@ -34,73 +34,10 @@ using std::list;
 using std::back_inserter;
 using namespace std::chrono;
 
-Studentas ivesk(bool randomMode) {
-    Studentas Laik;
-    cout << "Iveskite varda: "; getline(cin, Laik.vard);
-    cout << "Iveskite pavarde: "; getline(cin, Laik.pav);
-
-    if (randomMode) {
-        int n = rand() % 8 + 3;
-        for (int i = 0; i < n; i++) {
-            Laik.paz.push_back(rand() % 10 + 1);
-        }
-        Laik.egzas = rand() % 10 + 1;
-        cout << "Sugeneruoti " << n << " pazymiai ir egzaminas.\n";
-    } else {
-        cout << "Iveskite pazymius (baigti su 'q' arba ne skaiciumi):\n";
-        string input;
-        int pazymiuKiekis = 0;
-        while (true) {
-            cout << "Pazymys " << (pazymiuKiekis + 1) << ": ";
-            getline(cin, input);
-            if (input == "q" || input == "Q") {
-                if (pazymiuKiekis == 0) {
-                    cout << "Privalote ivesti bent viena pazymi! Bandykite dar karta.\n";
-                    continue;
-                }
-                break;
-            }
-            if (arSkaicius(input)) {
-                try {
-                    int pazymys = std::stoi(input);
-                    if (pazymys >= 1 && pazymys <= 10) {
-                        Laik.paz.push_back(pazymys);
-                        pazymiuKiekis++;
-                    } else {
-                        cout << "Klaida: pazymys turi buti nuo 1 iki 10!\n";
-                    }
-                } catch (const std::exception& e) {
-                    cout << "Klaida: netinkamas pazymys! Bandykite dar karta.\n";
-                }
-            } else {
-                cout << "Klaida: iveskite skaiciu nuo 1 iki 10 arba 'q' baigti! Bandykite dar karta.\n";
-            }
-        }
-
-        while (true) {
-            string egzInput;
-            cout << "Iveskite egzamino rezultata (1-10): ";
-            getline(cin, egzInput);
-            if (arSkaicius(egzInput)) {
-                try {
-                    Laik.egzas = std::stoi(egzInput);
-                    if (Laik.egzas >= 1 && Laik.egzas <= 10) {
-                        break;
-                    } else {
-                        cout << "Klaida: egzamino rezultatas turi buti nuo 1 iki 10!\n";
-                    }
-                } catch (const std::exception& e) {
-                    cout << "Klaida: netinkamas egzamino rezultatas! Bandykite dar karta.\n";
-                }
-            } else {
-                cout << "Klaida: iveskite skaiciu nuo 1 iki 10! Bandykite dar karta.\n";
-            }
-        }
-    }
-
-    Laik.rez_vid = apskaiciuotiGalutiniVid(Laik);
-    Laik.rez_med = apskaiciuotiGalutiniMed(Laik);
-    return Laik;
+Studentas ivestiStudenta(bool randomMode) {
+    Studentas studentas;
+    studentas.readStudent(cin, randomMode);
+    return studentas;
 }
 
 void parodykFailuSarasa() {
@@ -654,6 +591,7 @@ template void testuotiPasirinktaFaila<std::vector<Studentas>>(int dydis);
 template void testuotiPasirinktaFaila<std::list<Studentas>>(int dydis);
 template void testuotiVisasStrategijas<std::vector<Studentas>>(int dydis);
 template void testuotiVisasStrategijas<std::list<Studentas>>(int dydis);
+
 
 
 
