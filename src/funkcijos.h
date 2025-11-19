@@ -10,7 +10,7 @@ using std::string;
 using std::vector;
 using std::list;
 
-Studentas ivesk(bool randomMode);
+Studentas ivestiStudenta(bool randomMode = false);
 void parodykFailuSarasa();
 template<typename Container>
 void issaugokIFaila(const Container &Grupe, const string &failoVardas);
@@ -22,10 +22,6 @@ Container nuskaitykIsFailo(const string &failoVardas);
 void generuotiStudentuFailus();
 double testuotiFailuKurima();
 
-double median(vector<int> v);
-double apskaiciuotiGalutiniVid(const Studentas &s);
-double apskaiciuotiGalutiniMed(const Studentas &s);
-
 template<typename Container>
 void rusiuokStudentus(Container &Grupe);
 template<typename Container>
@@ -34,7 +30,6 @@ template<typename Container>
 void padalinkStudentus2(Container &Grupe, Container &Vargsai);
 template<typename Container>
 void padalinkStudentus3(Container &Grupe, Container &Vargsai);
-bool palyginkStudentusPagalSkaitineReiksme(const Studentas &a, const Studentas &b);
 
 bool arSkaicius(const string &str);
 int gautiSkaiciu(const string &pranesimas);
@@ -48,5 +43,3 @@ void testuotiVisasStrategijas(int dydis);
 
 
 #endif
-
-
