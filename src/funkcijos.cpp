@@ -61,7 +61,7 @@ void issaugokIFaila(const Container &Grupe, const string &failoVardas) {
     out << string(70, '-') << endl;
     out << fixed << setprecision(2);
     for (auto &s : Grupe) {
-        out << setw(15) << s.pav << setw(15) << s.vard << setw(20) << s.rez_vid << setw(20) << s.rez_med << endl;
+        out << setw(15) << s.pavarde() << setw(15) << s.vardas() << setw(20) << s.rezultatasVidurkis() << setw(20) << s.rezultatasMediana() << endl;
     }
     out.close();
     cout << "Rezultatai issaugoti faile " << failoVardas << endl;
@@ -78,7 +78,7 @@ void issaugokPadalintusStudentus(const Container &Vargsai, const Container &Kiet
     outVargsai << string(70, '-') << endl;
     outVargsai << fixed << setprecision(2);
     for (auto &s : Vargsai) {
-        outVargsai << setw(20) << s.pav << setw(20) << s.vard << setw(20) << s.rez_vid << setw(20) << s.rez_med << endl;
+        outVargsai << setw(20) << s.pavarde() << setw(20) << s.vardas() << setw(20) << s.rezultatasVidurkis() << setw(20) << s.rezultatasMediana() << endl;
     }
     outVargsai.close();
     cout << "Vargsai issaugoti faile vargsai.txt (" << Vargsai.size() << " studentai)" << endl;
@@ -92,7 +92,7 @@ void issaugokPadalintusStudentus(const Container &Vargsai, const Container &Kiet
     outKietiakiai << string(70, '-') << endl;
     outKietiakiai << fixed << setprecision(2);
     for (auto &s : Kietiakiai) {
-        outKietiakiai << setw(20) << s.pav << setw(20) << s.vard << setw(20) << s.rez_vid << setw(20) << s.rez_med << endl;
+        outKietiakiai << setw(20) << s.pavarde() << setw(20) << s.vardas() << setw(20) << s.rezultatasVidurkis() << setw(20) << s.rezultatasMediana() << endl;
     }
     outKietiakiai.close();
     cout << "Kietiakiai issaugoti faile kietiakiai.txt (" << Kietiakiai.size() << " studentai)" << endl;
@@ -130,10 +130,14 @@ Container nuskaitykIsFailo(const string &failoVardas) {
     while (getline(in, line)) {
         istringstream iss(line);
         Studentas s;
-        if (iss >> s.vard >> s.pav) {
-            s.paz.clear();
-            string token;
+        string vardas, pavarde;
+        
+        if (iss >> vardas >> pavarde) {
+            s.setVardas(vardas);
+            s.setPavarde(pavarde);
+            
             vector<int> visiPazymiai;
+            string token;
             bool klaidaEiluteje = false;
 
             while (iss >> token) {
@@ -154,11 +158,12 @@ Container nuskaitykIsFailo(const string &failoVardas) {
             }
 
             if (!klaidaEiluteje && !visiPazymiai.empty()) {
-                s.egzas = visiPazymiai.back();
+                int egzaminas = visiPazymiai.back();
                 visiPazymiai.pop_back();
-                s.paz = visiPazymiai;
-                s.rez_vid = apskaiciuotiGalutiniVid(s);
-                s.rez_med = apskaiciuotiGalutiniMed(s);
+                
+                s.setEgzaminas(egzaminas);
+                s.setPazymiai(visiPazymiai);
+                
                 Grupe.push_back(s);
                 nuskaityta++;
 
@@ -243,48 +248,20 @@ double testuotiFailuKurima() {
     return 0.0;
 }
 
-double median(vector<int> v) {
-    if (v.empty()) return 0.0;
-    sort(v.begin(), v.end());
-    size_t n = v.size();
-    if (n % 2 == 0) {
-        return (v[n/2 - 1] + v[n/2]) / 2.0;
-    } else {
-        return v[n/2];
-    }
-}
-
-double apskaiciuotiGalutiniVid(const Studentas &s) {
-    if (s.paz.empty()) {
-        return 0.6 * s.egzas;
-    }
-    double sum = 0.0;
-    for (int x : s.paz) sum += x;
-    double vid = sum / static_cast<double>(s.paz.size());
-    return 0.6 * s.egzas + 0.4 * vid;
-}
-
-double apskaiciuotiGalutiniMed(const Studentas &s) {
-    if (s.paz.empty()) {
-        return 0.6 * s.egzas;
-    }
-    return 0.6 * s.egzas + 0.4 * median(s.paz);
-}
-
 template<typename Container>
 void rusiuokStudentus(Container &Grupe) {
-    Grupe.sort(palyginkStudentusPagalSkaitineReiksme);
+    Grupe.sort(palyginkPagalPavarde);
 }
 
 template<>
 void rusiuokStudentus<std::vector<Studentas>>(std::vector<Studentas> &Grupe) {
-    sort(Grupe.begin(), Grupe.end(), palyginkStudentusPagalSkaitineReiksme);
+    sort(Grupe.begin(), Grupe.end(), palyginkPagalPavarde);
 }
 
 template<typename Container>
 void padalinkStudentus1(const Container &Grupe, Container &Vargsai, Container &Kietiakiai) {
     for (const auto &studentas : Grupe) {
-        if (studentas.rez_vid < 5.0) {
+        if (studentas.rezultatasVidurkis() < 5.0) {
             Vargsai.push_back(studentas);
         } else {
             Kietiakiai.push_back(studentas);
@@ -297,7 +274,7 @@ void padalinkStudentus1(const Container &Grupe, Container &Vargsai, Container &K
 template<typename Container>
 void padalinkStudentus2(Container &Grupe, Container &Vargsai) {
     auto it = std::remove_if(Grupe.begin(), Grupe.end(), [&Vargsai](const Studentas& s) {
-        if (s.rez_vid < 5.0) {
+        if (s.rezultatasVidurkis() < 5.0) {
             Vargsai.push_back(s);
             return true;
         }
@@ -311,25 +288,13 @@ void padalinkStudentus2(Container &Grupe, Container &Vargsai) {
 template<typename Container>
 void padalinkStudentus3(Container &Grupe, Container &Vargsai) {
     auto partition_point = std::stable_partition(Grupe.begin(), Grupe.end(), 
-        [](const Studentas& s) { return s.rez_vid >= 5.0; });
+        [](const Studentas& s) { return s.rezultatasVidurkis() >= 5.0; });
     
     Vargsai.assign(partition_point, Grupe.end());
     Grupe.erase(partition_point, Grupe.end());
     
     rusiuokStudentus(Vargsai);
     rusiuokStudentus(Grupe);
-}
-
-bool palyginkStudentusPagalSkaitineReiksme(const Studentas &a, const Studentas &b) {
-    int skaiciusA = gautiSkaitineReiksmeIsPavardes(a.pav);
-    int skaiciusB = gautiSkaitineReiksmeIsPavardes(b.pav);
-    if (skaiciusA != skaiciusB) {
-        return skaiciusA < skaiciusB;
-    }
-    if (a.pav != b.pav) {
-        return a.pav < b.pav;
-    }
-    return a.vard < b.vard;
 }
 
 bool arSkaicius(const string &str) {
@@ -502,7 +467,7 @@ void testuotiPasirinktaFaila(int dydis) {
     vargsaiOut << string(70, '-') << endl;
     vargsaiOut << fixed << setprecision(2);
     for (auto &s : Vargsai) {
-        vargsaiOut << setw(20) << s.pav << setw(20) << s.vard << setw(20) << s.rez_vid << setw(20) << s.rez_med << endl;
+        vargsaiOut << setw(20) << s.pavarde() << setw(20) << s.vardas() << setw(20) << s.rezultatasVidurkis() << setw(20) << s.rezultatasMediana() << endl;
     }
     vargsaiOut.close();
     auto vargsaiEnd = high_resolution_clock::now();
@@ -515,7 +480,7 @@ void testuotiPasirinktaFaila(int dydis) {
     kietiakiaiOut << string(70, '-') << endl;
     kietiakiaiOut << fixed << setprecision(2);
     for (auto &s : Kietiakiai) {
-        kietiakiaiOut << setw(20) << s.pav << setw(20) << s.vard << setw(20) << s.rez_vid << setw(20) << s.rez_med << endl;
+        kietiakiaiOut << setw(20) << s.pavarde() << setw(20) << s.vardas() << setw(20) << s.rezultatasVidurkis() << setw(20) << s.rezultatasMediana() << endl;
     }
     kietiakiaiOut.close();
     auto kietEnd = high_resolution_clock::now();
@@ -591,14 +556,3 @@ template void testuotiPasirinktaFaila<std::vector<Studentas>>(int dydis);
 template void testuotiPasirinktaFaila<std::list<Studentas>>(int dydis);
 template void testuotiVisasStrategijas<std::vector<Studentas>>(int dydis);
 template void testuotiVisasStrategijas<std::list<Studentas>>(int dydis);
-
-
-
-
-
-
-
-
-
-
-
