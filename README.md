@@ -159,7 +159,7 @@ Testavimas atliktas buvo 5 kartus visais atvejais su 1 milijonų, 10 milijonų s
 | O1 | 273.32 KB | 1 mil | 2.30 s | 0.24 s | 0.45 s | 1.34 s | 2.04 s |
 | O2 | 270.82 KB | 1 mil | 2.26 s | 0.24 s | 0.45 s | 1.34 s | 2.02 s |
 | O3 | 267.23 KB | 1 mil | 2.24 s | 0.22 s | 0.43 s | 1.33 s | 1.99 s |
-| O1 | 273.32 KB | 10 mil | 22.85 s | 2.96 s | 4.92 s | 13.59 s | 19.58 m |
+| O1 | 273.32 KB | 10 mil | 22.85 s | 2.96 s | 4.92 s | 13.59 s | 19.58 s |
 | O2 | 270.82 KB | 10 mil | 22.41 s | 2.99 s | 4.94 s | 13.44 s | 19.40 s |
 | O3 | 267.23 KB | 10 mil | 22.20 s | 2.74 s | 4.69 s | 13.43 s | 19.36 s |
 
