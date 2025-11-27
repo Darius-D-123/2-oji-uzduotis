@@ -57,21 +57,24 @@ void issaugokIFaila(const Container &Grupe, const string &failoVardas) {
         cout << "Klaida: nepavyko sukurti failo " << failoVardas << endl;
         return;
     }
-    out << left << setw(15) << "Pavarde" << setw(15) << "Vardas" << setw(20) << "Galutinis (Vid.)" << setw(20) << "Galutinis (Med.)" << endl;
+    out << left << setw(20) << "Pavarde" << setw(20) << "Vardas"
+        << setw(20) << "Galutinis (Vid.)" << setw(20) << "Galutinis (Med.)" << endl;
     out << string(70, '-') << endl;
     out << fixed << setprecision(2);
     for (auto &s : Grupe) {
-        out << setw(15) << s.pavarde() << setw(15) << s.vardas() << setw(20) << s.rezultatasVidurkis() << setw(20) << s.rezultatasMediana() << endl;
+        out << setw(20) << s.pavarde() << setw(20) << s.vardas()
+            << setw(20) << s.rezultatasVidurkis() << setw(20) << s.rezultatasMediana() << endl;
     }
     out.close();
-    cout << "Rezultatai issaugoti faile " << failoVardas << endl;
+    cout << "Rezultatai issaugoti faile " << failoVardas << " (" << Grupe.size() << " studentai)" << endl;
 }
 
+
 template<typename Container>
-void issaugokPadalintusStudentus(const Container &Vargsai, const Container &Kietiakiai) {
-    ofstream outVargsai("vargsai.txt");
+void issaugokPadalintusStudentus(const Container &Vargsai, const Container &Kietiakiai, const string &vargsaiFailas, const string &kietiakiaiFailas) {
+    ofstream outVargsai(vargsaiFailas);
     if (!outVargsai) {
-        cout << "Klaida: nepavyko sukurti failo vargsai.txt" << endl;
+        cout << "Klaida: nepavyko sukurti failo " << vargsaiFailas << endl;
         return;
     }
     outVargsai << left << setw(20) << "Pavarde" << setw(20) << "Vardas" << setw(20) << "Galutinis (Vid.)" << setw(20) << "Galutinis (Med.)" << endl;
@@ -81,11 +84,10 @@ void issaugokPadalintusStudentus(const Container &Vargsai, const Container &Kiet
         outVargsai << setw(20) << s.pavarde() << setw(20) << s.vardas() << setw(20) << s.rezultatasVidurkis() << setw(20) << s.rezultatasMediana() << endl;
     }
     outVargsai.close();
-    cout << "Vargsai issaugoti faile vargsai.txt (" << Vargsai.size() << " studentai)" << endl;
-
-    ofstream outKietiakiai("kietiakiai.txt");
+    cout << "Vargsai issaugoti faile " << vargsaiFailas << " (" << Vargsai.size() << " studentai)" << endl;
+    ofstream outKietiakiai(kietiakiaiFailas);
     if (!outKietiakiai) {
-        cout << "Klaida: nepavyko sukurti failo kietiakiai.txt" << endl;
+        cout << "Klaida: nepavyko sukurti failo " << kietiakiaiFailas << endl;
         return;
     }
     outKietiakiai << left << setw(20) << "Pavarde" << setw(20) << "Vardas" << setw(20) << "Galutinis (Vid.)" << setw(20) << "Galutinis (Med.)" << endl;
@@ -95,7 +97,7 @@ void issaugokPadalintusStudentus(const Container &Vargsai, const Container &Kiet
         outKietiakiai << setw(20) << s.pavarde() << setw(20) << s.vardas() << setw(20) << s.rezultatasVidurkis() << setw(20) << s.rezultatasMediana() << endl;
     }
     outKietiakiai.close();
-    cout << "Kietiakiai issaugoti faile kietiakiai.txt (" << Kietiakiai.size() << " studentai)" << endl;
+    cout << "Kietiakiai issaugoti faile " << kietiakiaiFailas << " (" << Kietiakiai.size() << " studentai)" << endl;
 }
 
 template<typename Container>
@@ -131,11 +133,11 @@ Container nuskaitykIsFailo(const string &failoVardas) {
         istringstream iss(line);
         Studentas s;
         string vardas, pavarde;
-        
+
         if (iss >> vardas >> pavarde) {
             s.setVardas(vardas);
             s.setPavarde(pavarde);
-            
+
             vector<int> visiPazymiai;
             string token;
             bool klaidaEiluteje = false;
@@ -160,10 +162,10 @@ Container nuskaitykIsFailo(const string &failoVardas) {
             if (!klaidaEiluteje && !visiPazymiai.empty()) {
                 int egzaminas = visiPazymiai.back();
                 visiPazymiai.pop_back();
-                
+
                 s.setEgzaminas(egzaminas);
                 s.setPazymiai(visiPazymiai);
-                
+
                 Grupe.push_back(s);
                 nuskaityta++;
 
@@ -287,12 +289,12 @@ void padalinkStudentus2(Container &Grupe, Container &Vargsai) {
 
 template<typename Container>
 void padalinkStudentus3(Container &Grupe, Container &Vargsai) {
-    auto partition_point = std::stable_partition(Grupe.begin(), Grupe.end(), 
+    auto partition_point = std::stable_partition(Grupe.begin(), Grupe.end(),
         [](const Studentas& s) { return s.rezultatasVidurkis() >= 5.0; });
-    
+
     Vargsai.assign(partition_point, Grupe.end());
     Grupe.erase(partition_point, Grupe.end());
-    
+
     rusiuokStudentus(Vargsai);
     rusiuokStudentus(Grupe);
 }
@@ -408,7 +410,7 @@ void testuotiProgramosSparta() {
         cout << "Jusu pasirinkimas (1 arba 2): ";
         string konteinerioPasirinkimas;
         getline(cin, konteinerioPasirinkimas);
-        
+
         if (konteinerioPasirinkimas == "1") {
             testuotiVisasStrategijas<std::vector<Studentas>>(dydis);
         } else if (konteinerioPasirinkimas == "2") {
@@ -512,6 +514,7 @@ void testuotiVisasStrategijas(int dydis) {
     cout << "nuskaitymo laikas: " << nuskaitymoLaikas.count() << "s\n";
     cout << "nuskaityta " << Grupe.size() << " studentu\n\n";
     cout << fixed << setprecision(6);
+
     cout << "1 STRATEGIJA (dvi kopijos):\n";
     Container Grupe1 = Grupe;
     Container Vargsai1, Kietiakiai1;
@@ -520,6 +523,11 @@ void testuotiVisasStrategijas(int dydis) {
     auto end1 = high_resolution_clock::now();
     duration<double> laikas1 = end1 - start1;
     cout << "Laikas: " << laikas1.count() << "s\n";
+    auto issaugojimoStart1 = high_resolution_clock::now();
+    issaugokPadalintusStudentus(Vargsai1, Kietiakiai1, "vargsai_strategija1.txt", "kietiakiai_strategija1.txt");
+    auto issaugojimoEnd1 = high_resolution_clock::now();
+    duration<double> issaugojimoLaikas1 = issaugojimoEnd1 - issaugojimoStart1;
+
     cout << "2 STRATEGIJA (remove_if):\n";
     Container Grupe2 = Grupe;
     Container Vargsai2;
@@ -528,6 +536,11 @@ void testuotiVisasStrategijas(int dydis) {
     auto end2 = high_resolution_clock::now();
     duration<double> laikas2 = end2 - start2;
     cout << "Laikas: " << laikas2.count() << "s\n";
+    auto issaugojimoStart2 = high_resolution_clock::now();
+    issaugokPadalintusStudentus(Vargsai2, Grupe2, "vargsai_strategija2.txt", "kietiakiai_strategija2.txt");
+    auto issaugojimoEnd2 = high_resolution_clock::now();
+    duration<double> issaugojimoLaikas2 = issaugojimoEnd2 - issaugojimoStart2;
+
     cout << "3 STRATEGIJA (stable_partition):\n";
     Container Grupe3 = Grupe;
     Container Vargsai3;
@@ -536,12 +549,16 @@ void testuotiVisasStrategijas(int dydis) {
     auto end3 = high_resolution_clock::now();
     duration<double> laikas3 = end3 - start3;
     cout << "Laikas: " << laikas3.count() << "s\n";
+    auto issaugojimoStart3 = high_resolution_clock::now();
+    issaugokPadalintusStudentus(Vargsai3, Grupe3, "vargsai_strategija3.txt", "kietiakiai_strategija3.txt");
+    auto issaugojimoEnd3 = high_resolution_clock::now();
+    duration<double> issaugojimoLaikas3 = issaugojimoEnd3 - issaugojimoStart3;
 }
 
 template void issaugokIFaila<std::vector<Studentas>>(const std::vector<Studentas> &Grupe, const string &failoVardas);
 template void issaugokIFaila<std::list<Studentas>>(const std::list<Studentas> &Grupe, const string &failoVardas);
-template void issaugokPadalintusStudentus<std::vector<Studentas>>(const std::vector<Studentas> &Vargsai, const std::vector<Studentas> &Kietiakiai);
-template void issaugokPadalintusStudentus<std::list<Studentas>>(const std::list<Studentas> &Vargsai, const std::list<Studentas> &Kietiakiai);
+template void issaugokPadalintusStudentus<std::vector<Studentas>>(const std::vector<Studentas> &Vargsai, const std::vector<Studentas> &Kietiakiai, const string &vargsaiFailas, const string &kietiakiaiFailas);
+template void issaugokPadalintusStudentus<std::list<Studentas>>(const std::list<Studentas> &Vargsai, const std::list<Studentas> &Kietiakiai, const string &vargsaiFailas, const string &kietiakiaiFailas);
 template std::vector<Studentas> nuskaitykIsFailo<std::vector<Studentas>>(const string &failoVardas);
 template std::list<Studentas> nuskaitykIsFailo<std::list<Studentas>>(const string &failoVardas);
 template void rusiuokStudentus<std::vector<Studentas>>(std::vector<Studentas> &Grupe);
