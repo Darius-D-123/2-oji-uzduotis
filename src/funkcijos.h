@@ -15,8 +15,7 @@ void parodykFailuSarasa();
 template<typename Container>
 void issaugokIFaila(const Container &Grupe, const string &failoVardas);
 template<typename Container>
-void issaugokPadalintusStudentus(const Container &Vargsai, const Container &Kietiakiai);
-
+void issaugokPadalintusStudentus(const Container &Vargsai, const Container &Kietiakiai, const string &vargsaiFailas, const string &kietiakiaiFailas);
 template<typename Container>
 Container nuskaitykIsFailo(const string &failoVardas);
 void generuotiStudentuFailus();
