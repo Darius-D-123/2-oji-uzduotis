@@ -4,6 +4,12 @@
 #include <numeric>
 #include <random>
 #include <stdexcept>
+#include <iomanip>
+
+using std::left;
+using std::setw;
+using std::fixed;
+using std::setprecision;
 
 double median(std::vector<int> v) {
     if (v.empty()) return 0.0;
@@ -26,10 +32,6 @@ Studentas::Studentas(const std::string& vardas, const std::string& pavarde)
       rezultatas_vidurkis_(0.0), rezultatas_mediana_(0.0) {
 }
 
-Studentas::Studentas(std::istream& is) {
-    readStudent(is);
-}
-
 Studentas::Studentas(const Studentas& other)
     : vardas_(other.vardas_), pavarde_(other.pavarde_),
       egzaminas_(other.egzaminas_), pazymiai_(other.pazymiai_),
@@ -49,7 +51,57 @@ Studentas& Studentas::operator=(const Studentas& other) {
     return *this;
 }
 
+Studentas::Studentas(Studentas&& other) noexcept
+    : vardas_(std::move(other.vardas_)),
+      pavarde_(std::move(other.pavarde_)),
+      egzaminas_(other.egzaminas_),
+      pazymiai_(std::move(other.pazymiai_)),
+      rezultatas_vidurkis_(other.rezultatas_vidurkis_),
+      rezultatas_mediana_(other.rezultatas_mediana_) {
+    other.vardas_.clear();
+    other.pavarde_.clear();
+    other.egzaminas_ = 0;
+    other.pazymiai_.clear();
+    other.rezultatas_vidurkis_ = 0.0;
+    other.rezultatas_mediana_ = 0.0;
+}
+
+Studentas& Studentas::operator=(Studentas&& other) noexcept {
+    if (this != &other) {
+        vardas_ = std::move(other.vardas_);
+        pavarde_ = std::move(other.pavarde_);
+        egzaminas_ = other.egzaminas_;
+        pazymiai_ = std::move(other.pazymiai_);
+        rezultatas_vidurkis_ = other.rezultatas_vidurkis_;
+        rezultatas_mediana_ = other.rezultatas_mediana_;
+        other.vardas_.clear();
+        other.pavarde_.clear();
+        other.egzaminas_ = 0;
+        other.pazymiai_.clear();
+        other.rezultatas_vidurkis_ = 0.0;
+        other.rezultatas_mediana_ = 0.0;
+    }
+    return *this;
+}
+
 Studentas::~Studentas() {
+    clearData();
+}
+
+void Studentas::clearData() {
+    vardas_.clear();
+    pavarde_.clear();
+    egzaminas_ = 0;
+    pazymiai_.clear();
+    pazymiai_.shrink_to_fit();
+    rezultatas_vidurkis_ = 0.0;
+    rezultatas_mediana_ = 0.0;
+}
+
+bool Studentas::isEmpty() const {
+    return vardas_.empty() && pavarde_.empty() && 
+           pazymiai_.empty() && egzaminas_ == 0 &&
+           rezultatas_vidurkis_ == 0.0 && rezultatas_mediana_ == 0.0;
 }
 
 void Studentas::skaiciuotiRezultatus() {
@@ -171,14 +223,10 @@ std::istream& Studentas::readStudent(std::istream& is, bool randomMode) {
 }
 
 void Studentas::display(std::ostream& os) const {
-    os << "Vardas: " << vardas_ << ", Pavarde: " << pavarde_
-       << ", Egzaminas: " << egzaminas_ << ", Pazymiai: ";
-    for (size_t i = 0; i < pazymiai_.size(); ++i) {
-        os << pazymiai_[i];
-        if (i < pazymiai_.size() - 1) os << ", ";
-    }
-    os << ", Galutinis (Vid.): " << rezultatas_vidurkis_
-       << ", Galutinis (Med.): " << rezultatas_mediana_;
+    os << left << setw(20) << pavarde_ << setw(20) << vardas_
+       << fixed << setprecision(2)
+       << setw(20) << rezultatas_vidurkis_ 
+       << setw(20) << rezultatas_mediana_;
 }
 
 bool Studentas::operator<(const Studentas& other) const {
@@ -210,3 +258,4 @@ std::ostream& operator<<(std::ostream& os, const Studentas& studentas) {
     studentas.display(os);
     return os;
 }
+
