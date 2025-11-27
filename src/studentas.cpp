@@ -238,6 +238,25 @@ bool Studentas::operator>(const Studentas& other) const {
     return other < *this;
 }
 
+bool Studentas::operator==(const Studentas& other) const {
+    return vardas_ == other.vardas_ && 
+           pavarde_ == other.pavarde_ &&
+           egzaminas_ == other.egzaminas_ &&
+           pazymiai_ == other.pazymiai_;
+}
+
+bool Studentas::operator!=(const Studentas& other) const {
+    return !(*this == other);
+}
+
+bool Studentas::operator<=(const Studentas& other) const {
+    return !(*this > other);
+}
+
+bool Studentas::operator>=(const Studentas& other) const {
+    return !(*this < other);
+}
+
 bool palyginkPagalPavarde(const Studentas& a, const Studentas& b) {
     return a.pavarde() < b.pavarde();
 }
@@ -258,4 +277,3 @@ std::ostream& operator<<(std::ostream& os, const Studentas& studentas) {
     studentas.display(os);
     return os;
 }
-
