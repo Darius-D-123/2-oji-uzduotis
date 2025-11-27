@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <iomanip>
 
 class Studentas {
 private:
@@ -19,9 +20,11 @@ public:
     Studentas();
     Studentas(const std::string& vardas, const std::string& pavarde);
     Studentas(std::istream& is);
-    Studentas(const Studentas& other); 
-    Studentas& operator=(const Studentas& other); 
-    ~Studentas(); 
+    Studentas(const Studentas& other);
+    Studentas& operator=(const Studentas& other);
+    Studentas(Studentas&& other) noexcept;
+    Studentas& operator=(Studentas&& other) noexcept;
+    ~Studentas();
     inline std::string vardas() const { return vardas_; }
     inline std::string pavarde() const { return pavarde_; }
     inline int egzaminas() const { return egzaminas_; }
@@ -38,14 +41,20 @@ public:
     void display(std::ostream& os) const;
     bool operator<(const Studentas& other) const;
     bool operator>(const Studentas& other) const;
+    bool operator==(const Studentas& other) const;
+    bool operator!=(const Studentas& other) const;
+    bool operator<=(const Studentas& other) const;
+    bool operator>=(const Studentas& other) const;
+    void clearData();
+    bool isEmpty() const;
+    size_t pazymiuSkaicius() const { return pazymiai_.size(); }
 };
 
 bool palyginkPagalPavarde(const Studentas& a, const Studentas& b);
 bool palyginkPagalVarda(const Studentas& a, const Studentas& b);
 bool palyginkPagalGalutini(const Studentas& a, const Studentas& b);
+
 std::istream& operator>>(std::istream& is, Studentas& studentas);
 std::ostream& operator<<(std::ostream& os, const Studentas& studentas);
 
 #endif
-
-
