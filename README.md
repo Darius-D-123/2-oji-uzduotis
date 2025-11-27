@@ -166,3 +166,94 @@ Testavimas atliktas buvo 5 kartus visais atvejais su 1 milijonų, 10 milijonų s
 #### Išvados
 
 Remiantis testavimais, matome, kad optimizavimo lygiai O1, O2 ir O3 suteikė nuo 2% iki 7% papildomą greičio padidinimą, o didžiausias efektas pasiektas su O3 optimizavimu ir dideliais duomenų kiekiais.
+
+### v1.2
+
+Realizavimas `Rule of three` ir įvesties/išvesties operatoriaus mano turimai Studentas klasei.
+
+|  Funkcija |  Įgyvendinimas | Naudojami Operatoriai |
+| :--- | :--- | :--- |
+| Duomenų įvedimas rankiniu būdu | `ivestiStudenta(false)` | `readStudent` |
+| Duomenų įvedimas automatinis | `ivestiStudenta(true)` | `readStudent` su randomMode |
+| Duomenų įvedimas iš failo | `nuskaitykIsFailo()` | `operator>>` per failo srautą |
+| Išvestis į ekraną | `display()` | - |
+| Išvestis į failą | `issaugokIFaila()` | `operator<<` su ofstream |
+
+#### Rule of Three Implementacija
+
+##### Kopijavimo Konstruktorius
+
+`Studentas::Studentas(const Studentas& other) `<br />
+`    : vardas_(other.vardas_), pavarde_(other.pavarde_), `<br />
+`      egzaminas_(other.egzaminas_), pazymiai_(other.pazymiai_), `<br />
+`      rezultatas_vidurkis_(other.rezultatas_vidurkis_), `<br />
+`      rezultatas_mediana_(other.rezultatas_mediana_) { `<br />
+`}`
+
+Panaudojimas: Sūkuriant naujus studentus kopijuojant iš esamų, dirbant su STL konteineriais.
+
+##### Kopijavimo Priskyrimo Operatorius
+
+`Studentas& Studentas::operator=(const Studentas& other) { ` <br />
+`    if (this != &other) { ` <br />
+`        vardas_ = other.vardas_; ` <br />
+`        pavarde_ = other.pavarde_; ` <br />
+`        egzaminas_ = other.egzaminas_; ` <br />
+`        pazymiai_ = other.pazymiai_; ` <br />
+`        rezultatas_vidurkis_ = other.rezultatas_vidurkis_; ` <br />
+`        rezultatas_mediana_ = other.rezultatas_mediana_; ` <br />
+`    } ` <br />
+`    return *this; ` <br />
+`} `
+
+Panaudojimas: Priskyrimo operacijose tarp studentų objektų.
+
+##### Destruktorius
+
+`Studentas::~Studentas() { ` <br />
+`    clearData();  // Išvalo visus duomenis ` <br />
+`} ` 
+
+Panaudojimas: Automatiškai iškviečiamas sunaikinant objektus.
+
+#### Įvesties/Išvesties Operatoriai
+##### Įvesties Operatorius (operator>>)
+
+`std::istream& operator>>(std::istream& is, Studentas& studentas) { ` <br />
+`    return studentas.readStudent(is); ` <br />
+`} `  <br />
+
+1. Rankinis įvedimas:  <br />
+`Studentas s; `  <br />
+`s.readStudent(cin, false); `  <br />
+
+2. Automatinis įvedimas:  <br />
+`Studentas s; `  <br />
+`s.readStudent(cin, true); `  <br />
+
+3. Failo skaitymas:  <br />
+`while (getline(in, line)) { `  <br />
+`    istringstream iss(line); ` <br />
+`    Studentas s; ` <br />
+`    string vardas, pavarde; ` <br />
+`    if (iss >> vardas >> pavarde) { ` <br />
+`        s.setVardas(vardas); ` <br />
+`        s.setPavarde(pavarde); ` <br />
+
+##### Išvesties Operatorius (operator<<) 
+`std::ostream& operator<<(std::ostream& os, const Studentas& studentas) { `   <br />
+`    studentas.display(os); `  <br />
+`    return os; `  <br />
+`} `  <br />
+
+1. Ekrano išvedimas:   <br />
+`os << left << setw(20) << pavarde_ << setw(20) << vardas_ ` <br />
+`   << fixed << setprecision(2) ` <br />
+`   << setw(20) << rezultatas_vidurkis_  ` <br />
+`   << setw(20) << rezultatas_mediana_; ` <br />
+
+2. Failo išvedimas:  <br />
+`for (auto &s : Grupe) { ` <br />
+`    out << setw(20) << s.pavarde() << setw(20) << s.vardas() ` <br />
+`        << setw(20) << s.rezultatasVidurkis() << setw(20) << s.rezultatasMediana() << endl; ` <br />
+`} ` <br />
