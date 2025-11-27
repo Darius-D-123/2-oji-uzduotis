@@ -29,7 +29,7 @@ int main() {
         cout << "Jusu pasirinkimas (1, 2 arba 3): ";
         string pasirinkimas;
         getline(cin, pasirinkimas);
-        
+
         if (pasirinkimas == "1") {
             cout << "         FAILU KURIMO TESTAVIMAS \n";
             testuotiFailuKurima();
@@ -41,7 +41,7 @@ int main() {
             char konteinerioPasirinkimas;
             cin >> konteinerioPasirinkimas;
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            
+
             cout << "\nPasirinkite failo dydi:\n";
             cout << "1 - 1000 irasu\n";
             cout << "2 - 10000 irasu\n";
@@ -61,7 +61,7 @@ int main() {
                 cout << "Netinkamas pasirinkimas! Naudojamas 1000 irasu.\n";
                 dydis = 1000;
             }
-            
+
             if (konteinerioPasirinkimas == '1') {
                 testuotiPasirinktaFaila<vector<Studentas>>(dydis);
             } else if (konteinerioPasirinkimas == '2') {
@@ -78,7 +78,7 @@ int main() {
             char konteinerioPasirinkimas;
             cin >> konteinerioPasirinkimas;
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            
+
             cout << "\nPasirinkite failo dydi:\n";
             cout << "1 - 1000 irasu\n";
             cout << "2 - 10000 irasu\n";
@@ -98,7 +98,7 @@ int main() {
                 cout << "Netinkamas pasirinkimas! Naudojamas 1000 irasu.\n";
                 dydis = 1000;
             }
-            
+
             if (konteinerioPasirinkimas == '1') {
                 testuotiVisasStrategijas<vector<Studentas>>(dydis);
             } else if (konteinerioPasirinkimas == '2') {
@@ -172,7 +172,7 @@ int main() {
             cout << "Studentai suskirstyti i dvi grupes:\n";
             cout << "Vargsai (galutinis < 5.0): " << Vargsai.size() << " studentai\n";
             cout << "Kietiakiai (galutinis >= 5.0): " << Kietiakiai.size() << " studentai\n";
-            issaugokPadalintusStudentus(Vargsai, Kietiakiai);
+            issaugokPadalintusStudentus(Vargsai, Kietiakiai, "vargsai.txt", "kietiakiai.txt");
         }
     }
     return 0;
