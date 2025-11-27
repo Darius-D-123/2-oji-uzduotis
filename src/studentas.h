@@ -19,7 +19,6 @@ private:
 public:
     Studentas();
     Studentas(const std::string& vardas, const std::string& pavarde);
-    Studentas(std::istream& is);
     Studentas(const Studentas& other);
     Studentas& operator=(const Studentas& other);
     Studentas(Studentas&& other) noexcept;
