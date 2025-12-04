@@ -206,6 +206,9 @@ int main() {
             issaugokPadalintusStudentus(Vargsai, Kietiakiai, "vargsai.txt", "kietiakiai.txt");
         }
     }
+    demonstruotiAbstraktuma();
+    
     return 0;
 }
+
 
