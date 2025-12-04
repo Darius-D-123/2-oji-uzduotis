@@ -1,19 +1,19 @@
 #ifndef STUDENTAS_H_INCLUDED
 #define STUDENTAS_H_INCLUDED
 
+#include "zmogus.h"
 #include <string>
 #include <vector>
 #include <iostream>
 #include <iomanip>
 
-class Studentas {
+class Studentas : public Zmogus {
 private:
-    std::string vardas_;
-    std::string pavarde_;
     int egzaminas_;
     std::vector<int> pazymiai_;
     double rezultatas_vidurkis_;
     double rezultatas_mediana_;
+
     void skaiciuotiRezultatus();
 
 public:
@@ -24,29 +24,33 @@ public:
     Studentas(Studentas&& other) noexcept;
     Studentas& operator=(Studentas&& other) noexcept;
     ~Studentas();
-    inline std::string vardas() const { return vardas_; }
-    inline std::string pavarde() const { return pavarde_; }
+
     inline int egzaminas() const { return egzaminas_; }
     inline const std::vector<int>& pazymiai() const { return pazymiai_; }
     inline double rezultatasVidurkis() const { return rezultatas_vidurkis_; }
     inline double rezultatasMediana() const { return rezultatas_mediana_; }
     double galutinisBalas() const { return rezultatas_vidurkis_; }
-    void setVardas(const std::string& vardas);
-    void setPavarde(const std::string& pavarde);
+
+    void setVardas(const std::string& vardas) override;
+    void setPavarde(const std::string& pavarde) override;
     void setEgzaminas(int egzaminas);
     void setPazymiai(const std::vector<int>& pazymiai);
     void addPazymys(int pazymys);
+
+    void display(std::ostream& os) const override;
+    std::istream& read(std::istream& is) override;
+
     std::istream& readStudent(std::istream& is, bool randomMode = false);
-    void display(std::ostream& os) const;
+    void clearData();
+    bool isEmpty() const;
+    size_t pazymiuSkaicius() const { return pazymiai_.size(); }
+
     bool operator<(const Studentas& other) const;
     bool operator>(const Studentas& other) const;
     bool operator==(const Studentas& other) const;
     bool operator!=(const Studentas& other) const;
     bool operator<=(const Studentas& other) const;
     bool operator>=(const Studentas& other) const;
-    void clearData();
-    bool isEmpty() const;
-    size_t pazymiuSkaicius() const { return pazymiai_.size(); }
 };
 
 bool palyginkPagalPavarde(const Studentas& a, const Studentas& b);
