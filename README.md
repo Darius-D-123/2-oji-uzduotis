@@ -257,3 +257,20 @@ Panaudojimas: Automatiškai iškviečiamas sunaikinant objektus.
 `    out << setw(20) << s.pavarde() << setw(20) << s.vardas() ` <br />
 `        << setw(20) << s.rezultatasVidurkis() << setw(20) << s.rezultatasMediana() << endl; ` <br />
 `} ` <br />
+
+### v1.5
+
+Sukurta abstrakti bazinė klasė `Zmogus` ir iš jos išvestinė klasė `Studentas`.
+
+#### Klasių struktūros palyginimas
+
+| Aspektas | Struktūra v1.2 | Struktūra v1.5 (su Zmogus) |
+|------------|------------------|--------------|
+| **Klasės** | 1 klasė: `Studentas` | 2 klasės: `Zmogus` + `Studentas` |
+| **Paveldėjimas** | Nėra | `Studentas` paveldi iš `Zmogus`      |
+| **Abstraktumas** | Konkreti klasė | `Zmogus` - abstrakti klasė |
+| **Objektų kūrimas** | Galima: `Studentas s;` | Negalima: `Zmogus z;` (klaida) |
+| **Polimorfizmas** | Ribotas | Pilnas (virtualūs metodai) |
+| **Rule of Three** | Įgyvendinta `Studentas` klasėje | Įgyvendinta `Studentas` klasėje |
+
+<img width="721" height="569" alt="image" src="https://github.com/user-attachments/assets/918c1a21-4f8a-44f0-8eb9-b05da7a6e327" />
