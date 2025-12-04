@@ -15,6 +15,37 @@ using std::string;
 using std::vector;
 using std::list;
 
+void demonstruotiAbstraktuma() {
+    using namespace std;
+    
+    cout << "\nDEMONSTRACIJA\n";
+    
+    cout << "\nKas VEIKIA (teisingas naudojimas):\n";
+    Studentas student("Jonas", "Jonaitis");
+    student.addPazymys(8);
+    student.setEgzaminas(9);
+    
+    Zmogus* personPtr = &student;
+    Zmogus& personRef = student;
+    
+    cout << "1. Zmogus* ptr = &student; - rodykle i isvestine klase\n";
+    cout << "2. Zmogus& ref = student; - atskaita i isvestine klase\n";
+    cout << "3. ptr->vardas() = " << personPtr->vardas() << endl;
+    cout << "4. ptr->pavarde() = " << personPtr->pavarde() << endl;
+    
+    cout << "\nKas NEVEIKIA (neteisingas naudojimas):\n";
+    cout << "// Zmogus person; - KLAIDA: abstrakti klase\n";
+    cout << "// Zmogus* p = new Zmogus(); - KLAIDA: abstrakti klase\n";
+    
+    //Zmogus person;
+    //Zmogus* p = new Zmogus();
+
+    cout << "\nPolimorfizmo veiksmai:\n";
+    cout << "Iskvietimas display() per bazines klases rodykle:\n";
+    personPtr->display(cout);
+    cout << endl;
+}
+
 int main() {
     cout << "Ar norite atlikti greicio testavima? (t/n): ";
     char testavimoPasirinkimas;
@@ -177,3 +208,4 @@ int main() {
     }
     return 0;
 }
+
