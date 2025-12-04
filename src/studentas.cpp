@@ -23,17 +23,16 @@ double median(std::vector<int> v) {
 }
 
 Studentas::Studentas() 
-    : vardas_(""), pavarde_(""), egzaminas_(0), 
-      rezultatas_vidurkis_(0.0), rezultatas_mediana_(0.0) {
+    : Zmogus(), egzaminas_(0), rezultatas_vidurkis_(0.0), rezultatas_mediana_(0.0) {
 }
 
 Studentas::Studentas(const std::string& vardas, const std::string& pavarde)
-    : vardas_(vardas), pavarde_(pavarde), egzaminas_(0),
+    : Zmogus(vardas, pavarde), egzaminas_(0),
       rezultatas_vidurkis_(0.0), rezultatas_mediana_(0.0) {
 }
 
 Studentas::Studentas(const Studentas& other)
-    : vardas_(other.vardas_), pavarde_(other.pavarde_),
+    : Zmogus(other.vardas_, other.pavarde_),
       egzaminas_(other.egzaminas_), pazymiai_(other.pazymiai_),
       rezultatas_vidurkis_(other.rezultatas_vidurkis_),
       rezultatas_mediana_(other.rezultatas_mediana_) {
@@ -41,8 +40,7 @@ Studentas::Studentas(const Studentas& other)
 
 Studentas& Studentas::operator=(const Studentas& other) {
     if (this != &other) {
-        vardas_ = other.vardas_;
-        pavarde_ = other.pavarde_;
+        Zmogus::operator=(other);
         egzaminas_ = other.egzaminas_;
         pazymiai_ = other.pazymiai_;
         rezultatas_vidurkis_ = other.rezultatas_vidurkis_;
@@ -52,32 +50,24 @@ Studentas& Studentas::operator=(const Studentas& other) {
 }
 
 Studentas::Studentas(Studentas&& other) noexcept
-    : vardas_(std::move(other.vardas_)),
-      pavarde_(std::move(other.pavarde_)),
+    : Zmogus(std::move(other.vardas_), std::move(other.pavarde_)),
       egzaminas_(other.egzaminas_),
       pazymiai_(std::move(other.pazymiai_)),
       rezultatas_vidurkis_(other.rezultatas_vidurkis_),
       rezultatas_mediana_(other.rezultatas_mediana_) {
-    other.vardas_.clear();
-    other.pavarde_.clear();
     other.egzaminas_ = 0;
-    other.pazymiai_.clear();
     other.rezultatas_vidurkis_ = 0.0;
     other.rezultatas_mediana_ = 0.0;
 }
 
 Studentas& Studentas::operator=(Studentas&& other) noexcept {
     if (this != &other) {
-        vardas_ = std::move(other.vardas_);
-        pavarde_ = std::move(other.pavarde_);
+        Zmogus::operator=(std::move(other));
         egzaminas_ = other.egzaminas_;
         pazymiai_ = std::move(other.pazymiai_);
         rezultatas_vidurkis_ = other.rezultatas_vidurkis_;
         rezultatas_mediana_ = other.rezultatas_mediana_;
-        other.vardas_.clear();
-        other.pavarde_.clear();
         other.egzaminas_ = 0;
-        other.pazymiai_.clear();
         other.rezultatas_vidurkis_ = 0.0;
         other.rezultatas_mediana_ = 0.0;
     }
@@ -154,6 +144,10 @@ void Studentas::addPazymys(int pazymys) {
     }
     pazymiai_.push_back(pazymys);
     skaiciuotiRezultatus();
+}
+
+std::istream& Studentas::read(std::istream& is) {
+    return readStudent(is);
 }
 
 std::istream& Studentas::readStudent(std::istream& is, bool randomMode) {
@@ -270,7 +264,7 @@ bool palyginkPagalGalutini(const Studentas& a, const Studentas& b) {
 }
 
 std::istream& operator>>(std::istream& is, Studentas& studentas) {
-    return studentas.readStudent(is);
+    return studentas.read(is);
 }
 
 std::ostream& operator<<(std::ostream& os, const Studentas& studentas) {
