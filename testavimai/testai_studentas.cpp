@@ -82,3 +82,23 @@ TEST_CASE("Move assignment operator perkelia duomenis", "[move][assign]") {
     REQUIRE(a.rezultatasVidurkis() == Catch::Approx(0.0));
     REQUIRE(a.rezultatasMediana() == Catch::Approx(0.0));
 }
+
+TEST_CASE("Getteriai grazina teisingas reiksmes", "[getters]") {
+    Studentas s("Vardenis", "Pavardenis");
+    s.setPazymiai({5, 8, 7});
+    s.setEgzaminas(5);
+
+    REQUIRE(s.vardas() == "Vardenis");
+    REQUIRE(s.pavarde() == "Pavardenis");
+    REQUIRE(s.egzaminas() == 5);
+    REQUIRE(s.pazymiai().size() == 3);
+}
+
+TEST_CASE("operator<< isveda varda ir pavarde", "[io]") {
+    Studentas s("Vardenis", "Pavardenis");
+    std::ostringstream oss;
+    oss << s;
+
+    REQUIRE(oss.str().find("Vardenis") != std::string::npos);
+    REQUIRE(oss.str().find("Pavardenis") != std::string::npos);
+}
