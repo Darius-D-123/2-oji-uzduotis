@@ -129,3 +129,16 @@ TEST_CASE("Blogi pazymiai meta isimtis", "[exceptions]") {
     REQUIRE_THROWS_AS(s.addPazymys(0), std::out_of_range);
     REQUIRE_THROWS_AS(s.addPazymys(11), std::out_of_range);
 }
+
+TEST_CASE("arSkaicius atpazista skaicius", "[utils]") {
+    REQUIRE(arSkaicius("123") == true);
+    REQUIRE(arSkaicius("001") == true);
+    REQUIRE(arSkaicius("12a") == false);
+    REQUIRE(arSkaicius("") == false);
+}
+
+TEST_CASE("gautiSkaitineReiksmeIsPavardes istraukia gale esanti skaiciu", "[utils]") {
+    REQUIRE(gautiSkaitineReiksmeIsPavardes("Jonaitis123") == 123);
+    REQUIRE(gautiSkaitineReiksmeIsPavardes("A1") == 1);
+    REQUIRE(gautiSkaitineReiksmeIsPavardes("BeSkaiciaus") == 0);
+}
