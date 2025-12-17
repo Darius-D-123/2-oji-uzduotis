@@ -1,0 +1,7 @@
+var searchData=
+[
+  ['x_0',['X',['../struct_a_1_1_x.html#a5451eb8ce8f2bb71df095a9875891c9b',1,'A::X::X()'],['../struct_a_1_1_x.html#ac61e44612457173e8a3fcdbbc48a789e',1,'A::X::X(int v)']]],
+  ['xmlencode_1',['XmlEncode',['../class_catch_1_1_xml_encode.html#a306f957945562813960cc12ed2089b63',1,'Catch::XmlEncode::XmlEncode(StringRef str, ForWhat forWhat=ForTextNodes)'],['../class_catch_1_1_xml_encode.html#a306f957945562813960cc12ed2089b63',1,'Catch::XmlEncode::XmlEncode(StringRef str, ForWhat forWhat=ForTextNodes)']]],
+  ['xmlreporter_2',['XmlReporter',['../class_catch_1_1_xml_reporter.html#a52569de21b23c6f18812fb4369dc0d36',1,'Catch::XmlReporter::XmlReporter(ReporterConfig &amp;&amp;_config)'],['../class_catch_1_1_xml_reporter.html#a52569de21b23c6f18812fb4369dc0d36',1,'Catch::XmlReporter::XmlReporter(ReporterConfig &amp;&amp;_config)']]],
+  ['xmlwriter_3',['XmlWriter',['../class_catch_1_1_xml_writer.html#a179557581b3b64fa2576236ec4da95e3',1,'Catch::XmlWriter::XmlWriter(std::ostream &amp;os)'],['../class_catch_1_1_xml_writer.html#a735da4465c68e34d099d8ae06a3e48d4',1,'Catch::XmlWriter::XmlWriter(XmlWriter const &amp;)=delete'],['../class_catch_1_1_xml_writer.html#a179557581b3b64fa2576236ec4da95e3',1,'Catch::XmlWriter::XmlWriter(std::ostream &amp;os)'],['../class_catch_1_1_xml_writer.html#a735da4465c68e34d099d8ae06a3e48d4',1,'Catch::XmlWriter::XmlWriter(XmlWriter const &amp;)=delete']]]
+];
