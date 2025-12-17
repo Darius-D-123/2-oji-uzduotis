@@ -274,3 +274,82 @@ Sukurta abstrakti bazinė klasė `Zmogus` ir iš jos išvestinė klasė `Student
 | **Rule of Three** | Įgyvendinta `Studentas` klasėje | Įgyvendinta `Studentas` klasėje |
 
 <img width="721" height="569" alt="image" src="https://github.com/user-attachments/assets/918c1a21-4f8a-44f0-8eb9-b05da7a6e327" />
+
+### v2.0
+
+Šioje versijoje realizuoti Catch2 unit testai ir sugeneruota Doxygen HTML dokumentacija. 
+
+#### Keli pavyzdžiai testų
+
+```cpp
+TEST_CASE("Default constructor sukuria tuscia studenta", "[ctor][default]") {
+    Studentas s;
+
+    REQUIRE(s.vardas() == "");
+    REQUIRE(s.pavarde() == "");
+    REQUIRE(s.egzaminas() == 0);
+    REQUIRE(s.pazymiai().empty());
+    REQUIRE(s.rezultatasVidurkis() == Catch::Approx(0.0));
+    REQUIRE(s.rezultatasMediana() == Catch::Approx(0.0));
+    REQUIRE(s.isEmpty() == true);
+}
+```
+
+```cpp
+TEST_CASE("Parametrized constructor nustato varda ir pavarde", "[ctor][param]") {
+    Studentas s("Vardenis", "Pavardenis");
+
+    REQUIRE(s.vardas() == "Vardenis");
+    REQUIRE(s.pavarde() == "Pavardenis");
+}
+```
+<img width="618" height="366" alt="image" src="https://github.com/user-attachments/assets/93a31953-18d5-4d18-82c9-b88c024308e5" />
+
+#### Įdiegimo instrukcija
+
+##### Reikalavimai
+- CMake ≥ 3.14
+- C++ kompiliatorius (MinGW / GCC / MSVC)
+- Git
+
+##### Programos atsisiuntimas
+```powershell
+git clone https://github.com/Darius-D-123/2-oji-uzduotis.git
+cd 2-oji-uzduotis
+git checkout v2.0
+mkdir build
+cmake -S . -B build -G "MinGW Makefiles"
+cmake --build build
+```
+##### Programos paleidimas
+```powershell
+.\build\studentu_rusiavimas.exe
+```
+##### Unit testų paleidimas
+```powershell
+.\build\tests.exe
+```
+
+#### Naudojimosi instrukcija
+
+1. **Paleiskite programą:** `.\build\studentu_rusiavimas.exe`
+
+2. **Pasirinkite:**
+   - `t` - testuoti greitį
+   - `n` - netestuoti greičio
+
+3. **Jei pasirinkote `t`, tada atsiras parinktys:**
+   - **Testavimo tipas:** `1` (failai), `2` (veikimas), `3` (strategijos)
+
+4. **Jei pasirinkote 2 arba 3, tada atsiras parinktys:**
+   - **Konteineris:** `1` (vector) arba `2` (list)
+   - **Failo dydis:** `1` (1,000), `2` (10,000), `3` (100,000), `4` (1,000,000), `5` (10,000,000)
+
+5. **Jei pasirinkote `n` (2 punkte), tada parinkite:**
+   - `t` - generuoti studentų failus
+   - `n` - negeneruoti studentų failų
+
+6. **Jei pasirinkote `n` (5 punkte), tada parinkite:**
+   - `t` - generuoti atsitiktinai
+   - `n` - įvesti ranka
+   - `f` - nuskaityti iš failo
