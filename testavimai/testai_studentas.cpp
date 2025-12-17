@@ -102,3 +102,30 @@ TEST_CASE("operator<< isveda varda ir pavarde", "[io]") {
     REQUIRE(oss.str().find("Vardenis") != std::string::npos);
     REQUIRE(oss.str().find("Pavardenis") != std::string::npos);
 }
+
+TEST_CASE("Galutinis balas skaiciuojamas pagal vidurki: 0.6*egz + 0.4*vid", "[grade]") {
+    Studentas s("A", "B");
+    s.setPazymiai({10, 10});
+    s.setEgzaminas(10); 
+
+    REQUIRE(s.rezultatasVidurkis() == Catch::Approx(10.0));
+}
+
+TEST_CASE("Galutinis balas skaiciuojamas pagal mediana: 0.6*egz + 0.4*med", "[grade]") {
+    Studentas s("A", "B");
+    s.setPazymiai({1, 2, 3});
+    s.setEgzaminas(10);
+
+    REQUIRE(s.rezultatasMediana() == Catch::Approx(6.8));
+}
+
+
+TEST_CASE("Blogi pazymiai meta isimtis", "[exceptions]") {
+    Studentas s("A", "B");
+
+    REQUIRE_THROWS_AS(s.setEgzaminas(0), std::out_of_range);
+    REQUIRE_THROWS_AS(s.setEgzaminas(11), std::out_of_range);
+
+    REQUIRE_THROWS_AS(s.addPazymys(0), std::out_of_range);
+    REQUIRE_THROWS_AS(s.addPazymys(11), std::out_of_range);
+}
