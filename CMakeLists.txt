@@ -24,5 +24,6 @@ target_include_directories(core PUBLIC src)
 add_executable(studentu_rusiavimas src/main.cpp)
 target_link_libraries(studentu_rusiavimas PRIVATE core)
 
-add_executable(tests testai/testai_studentas.cpp)
+add_executable(tests testavimai/testai_studentas.cpp)
 target_link_libraries(tests PRIVATE core Catch2::Catch2WithMain)
+
